@@ -16,9 +16,11 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-color: var(--background-color);
+	user-select: none;
+    -moz-user-select: none;
 }
 
-h1.home-header {
+.home-header {
 	background-color: var(--background-color);
 	color: var(--header-color);
 	font-size: clamp(3rem, 20vw, 10rem);
@@ -29,8 +31,6 @@ h1.home-header {
 	overflow: none;
 	z-index: 2;
 	margin: 0 auto;
-	user-select: none;
-    -moz-user-select: none;
 }
 
 h5 {

@@ -14,16 +14,16 @@ function Navbar() {
 				<div className="navbar-main">HE</div>
 				<div className="navbar-main">ROJECT</div>
 				<div id="navbar-links">
-                <Link to="/" className="button is-link is-outlined">
+                <Link to="/" className="button is-link is-outlined" draggable="false">
 					Home
 				</Link>
-				<Link to="/synth" className="button is-warning is-link">
+				<Link to="/synth" className="button is-warning is-link" draggable="false">
 					Synth
 				</Link>
-				<Link to="/auth/signup" className="button is-link">
+				<Link to="/auth/signup" className="button is-link" draggable="false">
 					Signup
 				</Link>
-				<Link to="/auth/login" className="button is-link">
+				<Link to="/auth/login" className="button is-link" draggable="false">
 					Login
 				</Link>
                 </div>
