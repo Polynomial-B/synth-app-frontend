@@ -1,0 +1,39 @@
+:root {
+
+
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    border: 2px solid #575757;
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 5px;
+    margin: 10px;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333333;
+    color: rgb(198, 118, 255);
+    font-size: 1.5rem;
+    height: 50px;
+    margin: 2px;
+    user-select: none;
+    -moz-user-select: none;
+    border-radius: 5px;
+}
+
+.grid-item:hover {
+    background-color: rgba(132, 0, 255, 0.361);
+    color:rgb(234, 206, 255)
+}
+
+.grid-item:active {
+    transform: scale(0.9);
+    box-shadow: #ffffff;
+}
