@@ -33,6 +33,19 @@
 	margin: 0 auto;
 }
 
+h2.home-header {
+	background-color: var(--background-color);
+	color: var(--header-color);
+	font-size: clamp(3rem, 15vw, 8rem);
+	font-variant: small-caps slashed-zero;
+	position: sticky;
+	position: -webkit-sticky;
+	top: 0;
+	overflow: none;
+	z-index: 2;
+	margin: 0 auto;
+}
+
 h5 {
 	padding: 0;
 	margin: 0;
@@ -91,16 +104,6 @@ p {
   margin: 5px 5px 0 0;
 }
 
-/* .burger-option {
-	z-index: 1;
-	position: absolute;
-	right: 0;
-	height: 1.2em;
-} */
-
-
-
-
 footer {
   position: relative;
 	color: black;
@@ -116,7 +119,7 @@ footer {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	background-color: rgb(215, 223, 105);
+	background-color: rgb(245, 255, 108);
 	
 }
 

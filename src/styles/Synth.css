@@ -1,13 +1,22 @@
-
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(16, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     border: 2px solid #575757;
     border-radius: 15px;
     overflow: hidden;
     padding: 5px;
-    margin: 10px;
+    margin: 20px;
+    grid-auto-flow: row;
+    gap: 4px;
+    justify-content: space-around;
+}
+
+.settings-grid-container {
+    grid-auto-rows: 100px;
+}
+
+.synth-grid-container {
+    grid-auto-rows: 50px;
 }
 
 .grid-item {
@@ -17,9 +26,12 @@
     background-color: #333333;
     color: rgb(198, 118, 255);
     font-size: 1.5rem;
+    flex: 1 1 70px;
     height: 50px;
-    margin: 2px;
+    width: auto;
+    min-width: 50px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .grid-item:hover {
@@ -30,4 +42,40 @@
 .grid-item:active {
     transform: scale(0.9);
     box-shadow: #ffffff;
+}
+
+
+/* ! Slider Element -- to be exported / used as Prop */
+
+.form-element {
+    display: flex;
+    transform: rotate(-90deg);
+    width: 100px;
+    align-items: center;
+    
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 50px;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 10px;
+    overflow: none;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 50px;
+    background-color: purple;
+    cursor: pointer;
 }

@@ -7,12 +7,12 @@ function Navbar() {
 			<div className="static-navbar-left">
 				<div className="static-navbar-left-content">L</div>
 				<div className="static-navbar-left-content">T</div>
-				<div className="static-navbar-left-content">P</div>
+				<div className="static-navbar-left-content">S</div>
 			</div>
 			<div className="navbar-container">
-            <div className="navbar-main">OSE</div>
-				<div className="navbar-main">HE</div>
-				<div className="navbar-main">ROJECT</div>
+            <div className="navbar-main">IGHT</div>
+				<div className="navbar-main">RAIN</div>
+				<div className="navbar-main">EW</div>
 				<div id="navbar-links">
                 <Link to="/" className="button is-link is-outlined" draggable="false">
 					Home
