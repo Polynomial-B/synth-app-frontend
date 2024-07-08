@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import Login from "./components/Login";
 import Synth from "./components/Synth";
 import Footer from "./components/Footer";
-
+import Collection from "./components/Collection";
 
 function App() {
   return <>
@@ -20,6 +20,7 @@ function App() {
       <Route path="/synth" element={<Synth />} />
       <Route path="auth/signup" element={<Signup />} />
       <Route path="auth/login" element={<Login />} />
+      <Route path="/collection" element={<Collection />} />
     </Routes>
     <Footer />
   </Router>

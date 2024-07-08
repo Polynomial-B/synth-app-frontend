@@ -26,6 +26,9 @@ function Navbar() {
 				<Link to="/auth/login" className="button is-link" draggable="false">
 					Login
 				</Link>
+				<Link to="/collection" className="button is-link" draggable="false">
+					Collection
+				</Link>
                 </div>
 			</div>
 		</>
