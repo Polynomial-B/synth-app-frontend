@@ -10,9 +10,9 @@ function Navbar() {
 				<div className="static-navbar-left-content">S</div>
 			</div>
 			<div className="navbar-container">
-            <div className="navbar-main">IGHT</div>
-				<div className="navbar-main">RAIN</div>
-				<div className="navbar-main">EW</div>
+            <div className="navbar-main">OSING</div>
+				<div className="navbar-main">UESDAY</div>
+				<div className="navbar-main">ANITY</div>
 				<div id="navbar-links">
                 <Link to="/" className="button is-link is-outlined" draggable="false">
 					Home

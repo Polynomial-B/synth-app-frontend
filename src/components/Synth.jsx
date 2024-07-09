@@ -6,14 +6,22 @@ import notes from "../assets/notes.js";
 import * as Tone from "tone";
 import { toast } from "react-toastify";
 
+
 function Synth() {
 	const navigate = useNavigate();
 	const [gridSize, setGridSize] = useState(8);
 	const [formData, setFormData] = useState({
-		name: "",
-		a_d_s_r: [200, 200, 100, 300],
-		freq: [2, 2, 2, 2],
+		name: "My Synth",
+		a_d_s_r: [100, 200, 100, 300],
+        effects: [
+            { distortion: 0.5 },
+            { chorus: [4, 2.5, 0.5] },
+        ],
+		freqs: [2, 2, 2, 2],
 	});
+    
+    // console.log(formData);
+    
 
 	const gridArray = Array.from(
 		{ length: gridSize * 4 },
@@ -21,16 +29,18 @@ function Synth() {
 	);
 
 	const chorus = new Tone.Chorus(4, 2.5, 0.5).start();
-	const limiter = new Tone.Limiter(-6).toDestination();
-	const dist = new Tone.Distortion(0.8).toDestination();
+	const limiter = new Tone.Limiter(-6);
+	const dist = new Tone.Distortion(0.5);
 	const compressor = new Tone.Compressor(-30, 3);
 
 	// ! EQ not working
-	const equaliser = new Tone.EQ3({
-		low: -16,
-		mid: -16,
-		high: -16,
-	});
+	// const equaliser = new Tone.EQ3({
+	// 	low: -16,
+	// 	mid: -16,
+	// 	high: -16,
+	// });
+
+
 
 	const fmSynth = new Tone.FMSynth({
 		envelope: {
@@ -40,11 +50,12 @@ function Synth() {
 			release: formData.a_d_s_r[3] / 1000,
 		},
 	})
-		.connect(equaliser)
+		// .connect(equaliser)
 		.connect(dist)
 		.connect(chorus)
 		.connect(compressor)
-		.connect(limiter);
+		.connect(limiter)
+        .toDestination();
 
 	async function handleClick(e) {
 		console.clear();
@@ -58,35 +69,38 @@ function Synth() {
 		}
 	}
 
-    
-	function handleADSRChange(e, index) {
-		const newADSR = [...formData.a_d_s_r];
-		newADSR[index] = parseInt(e.target.value, 10);
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			a_d_s_r: newADSR,
-		}));
-		fmSynth.envelope.attack = newADSR[0] / 1000;
-		fmSynth.envelope.decay = newADSR[1] / 1000;
-		fmSynth.envelope.sustain = newADSR[2] / 1000;
-		fmSynth.envelope.release = newADSR[3] / 1000;
-	}
-
+    const formMappings = {
+        attack: 0,
+        decay: 1,
+        sustain: 2,
+        release: 3
+    }
     
 	function handleChange(e) {
-		const { name, value } = e.target;
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			[name]: value,
-		}));
-	}
+        const { name, value } = e.target
+        const newFormData = structuredClone(formData);
+        if (name.includes('attack') || name.includes('decay') || name.includes('sustain') || name.includes('release')) {
+            newFormData.a_d_s_r[formMappings[name]] = value;
+
+            console.log('print');
+        } else if (name === 'name') {
+            newFormData.name = value;
+            
+            console.log('Name: ', newFormData.name)
+        } else if (name === 'effects') {
+            
+        }
+        setFormData(newFormData)
+    
+    }
+
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
 			const token = localStorage.getItem("token");
 			const { data } = await axios.post(
-				`http://localhost:8000/api/synthesiser/`,
+				`http://localhost:8000/api/synths/`,
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -95,26 +109,14 @@ function Synth() {
 			toast.success("Synth added to your collection!");
 			navigate("/collection");
 		} catch (err) {
+            console.log(err.response.data);
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}
 
-	// function handleSliderChange(event) {
-	// 	setSliderOne(event.target.value);
-	// }
-
-	// function handleChange(e) {
-	// 	const newFormData = structuredClone(formData);
-
-	// 	newFormData[e.target.name] = e.target.value;
-	//     console.log(newFormData[e.target.name]);
-	//     console.log(e.target.name);
-	// 	setFormData(newFormData);
-	// }
-
 	return (
 		<>
-			<h2 className="home-header">Synth</h2>
+			<h2 className="home-header">{formData.name}</h2>
 			{/* <div className="grid-container settings-grid-container"> */}
 
 			<form onSubmit={handleSubmit}>
@@ -138,7 +140,7 @@ function Synth() {
 							min="0"
 							max="2000"
 							name="attack"
-							onChange={(e) => handleADSRChange(e, 0)}
+							onChange={(e) => handleChange(e, 0)}
 							value={formData.a_d_s_r[0]}
 						/>
 						<span>{formData.a_d_s_r[0]} ms</span>
@@ -152,7 +154,7 @@ function Synth() {
 							min="0"
 							max="2000"
 							name="decay"
-							onChange={(e) => handleADSRChange(e, 1)}
+							onChange={(e) => handleChange(e, 1)}
 							value={formData.a_d_s_r[1]}
 						/>
 						<span>{formData.a_d_s_r[1]} ms</span>
@@ -164,9 +166,9 @@ function Synth() {
 						<input
 							type="range"
 							min="0"
-							max="2000"
+							max="999"
 							name="sustain"
-							onChange={(e) => handleADSRChange(e, 2)}
+							onChange={(e) => handleChange(e, 2)}
 							value={formData.a_d_s_r[2]}
 						/>
 						<span>{formData.a_d_s_r[2]} ms</span>
@@ -180,12 +182,13 @@ function Synth() {
 							min="0"
 							max="2000"
 							name="release"
-							onChange={(e) => handleADSRChange(e, 3)}
+							onChange={(e) => handleChange(e, 3)}
 							value={formData.a_d_s_r[3]}
 						/>
 						<span>{formData.a_d_s_r[3]} ms</span>
 					</div>
 				</div>
+
 				<button className="button" type="submit">
 					Create Synth
 				</button>
