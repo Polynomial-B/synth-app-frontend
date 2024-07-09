@@ -20,7 +20,7 @@ function Synth() {
 		freqs: [2, 2, 2, 2],
 	});
     
-    // console.log(formData);
+    console.log(formData.effects[0]);
     
 
 	const gridArray = Array.from(
@@ -30,7 +30,7 @@ function Synth() {
 
 	const chorus = new Tone.Chorus(4, 2.5, 0.5).start();
 	const limiter = new Tone.Limiter(-6);
-	const dist = new Tone.Distortion(0.5);
+	const dist = new Tone.Distortion(formData.effects.distortion);
 	const compressor = new Tone.Compressor(-30, 3);
 
 	// ! EQ not working
@@ -44,31 +44,32 @@ function Synth() {
 
 	const fmSynth = new Tone.FMSynth({
 		envelope: {
-			attack: formData.a_d_s_r[0] / 1000,
-			decay: formData.a_d_s_r[1] / 1000,
-			sustain: formData.a_d_s_r[2] / 1000,
-			release: formData.a_d_s_r[3] / 1000,
+			attack: (formData.a_d_s_r[0] / 1000),
+			decay: (formData.a_d_s_r[1] / 1000),
+			sustain: (formData.a_d_s_r[2] / 1000),
+			release: (formData.a_d_s_r[3] / 1000),
 		},
-	})
-		// .connect(equaliser)
-		.connect(dist)
-		.connect(chorus)
-		.connect(compressor)
-		.connect(limiter)
-        .toDestination();
 
+	})
+    // .connect(equaliser)
+    .connect(dist)
+    .connect(chorus)
+    .connect(compressor)
+    .connect(limiter)
+    .toDestination();
+    
 	async function handleClick(e) {
-		console.clear();
+        console.clear();
 		console.log(e.target.innerText);
 		let noteToPlay = e.target.innerText;
 		if (noteToPlay === "") {
-			return;
+            return;
 		} else {
-			await Tone.start();
+            await Tone.start();
 			fmSynth.triggerAttackRelease(`${noteToPlay}`, "4n");
 		}
 	}
-
+    
     const formMappings = {
         attack: 0,
         decay: 1,
@@ -82,13 +83,15 @@ function Synth() {
         if (name.includes('attack') || name.includes('decay') || name.includes('sustain') || name.includes('release')) {
             newFormData.a_d_s_r[formMappings[name]] = value;
 
-            console.log('print');
         } else if (name === 'name') {
             newFormData.name = value;
             
             console.log('Name: ', newFormData.name)
-        } else if (name === 'effects') {
-            
+        } else if (name === 'distortion') {
+            newFormData.effects[0].distortion = value;
+        } else if (name === 'chorus') {
+            newFormData.effects[1].chorus = value;
+
         }
         setFormData(newFormData)
     
@@ -186,6 +189,20 @@ function Synth() {
 							value={formData.a_d_s_r[3]}
 						/>
 						<span>{formData.a_d_s_r[3]} ms</span>
+					</div>
+				</div>
+                <div className="field">
+					<label className="label">Distortion</label>
+					<div className="control">
+						<input
+							type="range"
+							min="0"
+							max="99"
+							name="distortion"
+							onChange={(e) => handleChange(e)}
+							value={formData.effects.distortion}
+						/>
+						<span>{formData.effects.distortion}</span>
 					</div>
 				</div>
 
