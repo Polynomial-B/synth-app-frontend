@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/Forms.css";
 
-export default function Login() {
+function Login() {
 	const navigate = useNavigate();
 
 	const [formData, setFormData] = useState({
@@ -76,3 +76,5 @@ export default function Login() {
 		</div>
 	);
 }
+
+export default Login;

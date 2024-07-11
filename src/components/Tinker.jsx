@@ -1,33 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/Synth.css";
+import "../App.css"
 import notes from "../assets/notes.js";
 import * as Tone from "tone";
 import { toast } from "react-toastify";
 
-
-
-
-function Synth() {
-    
-
+function Tinker() {
+	const { synthId } = useParams();
 	const navigate = useNavigate();
 	const [gridSize, setGridSize] = useState(8);
 	const [formData, setFormData] = useState({
-		name: `My Synth`,
+		name: "",
 		a_d_s_r: [100, 200, 100, 300],
-        effects: [
-            { distortion: 0.5 },
-            { chorus: [4, 2.5, 0.5] },
-        ],
-		freqs: [2, 2, 2, 2],
+		effects: [{ distortion: null }, { chorus: [] }],
+		freqs: [],
 	});
-    
-    console.log(formData);
-    
-    
 
+	useEffect(() => {
+		async function fetchSynth() {
+			try {
+				const token = localStorage.getItem("token");
+				const response = await axios.get(
+					`http://localhost:8000/api/synths/${synthId}/`,
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				setFormData(response.data);
+			} catch (error) {
+				toast.error("Error unpacking synth");
+			}
+		}
+		fetchSynth();
+	}, [synthId]);
 
 	const gridArray = Array.from(
 		{ length: gridSize * 4 },
@@ -39,85 +44,85 @@ function Synth() {
 	const dist = new Tone.Distortion(formData.effects.distortion);
 	const compressor = new Tone.Compressor(-30, 3);
 
-	// ! EQ not working
-	// const equaliser = new Tone.EQ3({
-	// 	low: -16,
-	// 	mid: -16,
-	// 	high: -16,
-	// });
-
-
-
 	const fmSynth = new Tone.FMSynth({
 		envelope: {
-			attack: (formData.a_d_s_r[0] / 1000),
-			decay: (formData.a_d_s_r[1] / 1000),
-			sustain: (formData.a_d_s_r[2] / 1000),
-			release: (formData.a_d_s_r[3] / 1000),
-
+			attack: formData.a_d_s_r[0] / 1000,
+			decay: formData.a_d_s_r[1] / 1000,
+			sustain: formData.a_d_s_r[2] / 1000,
+			release: formData.a_d_s_r[3] / 1000,
 		},
-
 	})
-    // .connect(equaliser)
-    .connect(dist)
-    .connect(chorus)
-    .connect(compressor)
-    .connect(limiter)
-    .toDestination();
-    
+		// .connect(equaliser)
+		.connect(dist)
+		.connect(chorus)
+		.connect(compressor)
+		.connect(limiter)
+		.toDestination();
+
 	async function handleClick(e) {
-        console.clear();
-		console.log(e.target.innerText);
 		let noteToPlay = e.target.innerText;
 		if (noteToPlay === "") {
-            return;
+			return;
 		} else {
-            await Tone.start();
+			await Tone.start();
 			fmSynth.triggerAttackRelease(`${noteToPlay}`, "4n");
 		}
 	}
-    
-    const formMappings = {
-        attack: 0,
-        decay: 1,
-        sustain: 2,
-        release: 3
-    }
-    
+
+	const formMappings = {
+		attack: 0,
+		decay: 1,
+		sustain: 2,
+		release: 3,
+	};
+
 	function handleChange(e) {
-        const { name, value } = e.target
-        const newFormData = structuredClone(formData);
-        if (name.includes('attack') || name.includes('decay') || name.includes('sustain') || name.includes('release')) {
-            newFormData.a_d_s_r[formMappings[name]] = value;
-
-        } else if (name === 'name') {
-            newFormData.name = value;
-
-        } else if (name === 'distortion') {
-            newFormData.effects[0].distortion = value;
-        } else if (name === 'chorus') {
-            newFormData.effects[1].chorus = value;
-
-        }
-        setFormData(newFormData)
-    
-    }
-
+		const { name, value } = e.target;
+		const newFormData = structuredClone(formData);
+		if (
+			name.includes("attack") ||
+			name.includes("decay") ||
+			name.includes("sustain") ||
+			name.includes("release")
+		) {
+			newFormData.a_d_s_r[formMappings[name]] = value;
+		} else if (name === "name") {
+			newFormData.name = value;
+		} else if (name === "distortion") {
+			newFormData.effects[0].distortion = value;
+		} else if (name === "chorus") {
+			newFormData.effects[1].chorus = value;
+		}
+		setFormData(newFormData);
+	}
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
 			const token = localStorage.getItem("token");
-			const { data } = await axios.post(
-				`http://localhost:8000/api/synths/`,
+			const { data } = await axios.put(
+				`http://localhost:8000/api/synths/${synthId}/`,
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },
 				}
 			);
-			toast.success("Synth added to your collection!");
-			navigate("/collection");
+			toast.success("Settings saved!");
 		} catch (err) {
+			console.log(err.response.data);
+			toast.error("Sorry, we have encountered an error!");
+		}
+	}
+
+	async function handleDelete() {
+		try {
+			const token = localStorage.getItem("token");
+			await axios.delete(`http://localhost:8000/api/synths/${synthId}/`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			toast.success("Synth deleted!");
+			navigate("/collection");
+		} catch (error) {
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}
@@ -196,7 +201,7 @@ function Synth() {
 						<span>{formData.a_d_s_r[3]} ms</span>
 					</div>
 				</div>
-                <div className="field">
+				<div className="field">
 					<label className="label">Distortion</label>
 					<div className="control">
 						<input
@@ -212,9 +217,12 @@ function Synth() {
 				</div>
 
 				<button className="button" type="submit">
-					Create Synth
+					Save Settings
 				</button>
 			</form>
+				<button className="button is-danger" onClick={handleDelete}>
+					Delete Synth
+				</button>
 
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
@@ -231,4 +239,4 @@ function Synth() {
 	);
 }
 
-export default Synth;
+export default Tinker;

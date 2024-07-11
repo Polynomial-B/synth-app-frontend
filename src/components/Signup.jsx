@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify'
 import '../styles/Forms.css'
 
-export default function Signup() {
+function Signup() {
 
     const navigate = useNavigate()
 
@@ -96,3 +96,5 @@ export default function Signup() {
       </div>
   );
 }
+
+export default Signup

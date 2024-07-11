@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Synth from "./components/Synth";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
+import Tinker from "./components/Tinker";
 
 function App() {
   return <>
@@ -21,6 +22,7 @@ function App() {
       <Route path="auth/signup" element={<Signup />} />
       <Route path="auth/login" element={<Login />} />
       <Route path="/collection" element={<Collection />} />
+      <Route path="/tinker/:synthId" element={<Tinker />} />
     </Routes>
     <Footer />
   </Router>

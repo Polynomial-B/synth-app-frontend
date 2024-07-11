@@ -1,3 +1,16 @@
+h2.synth-header {
+	background-color: var(--background-color);
+	color: var(--header-color);
+	font-size: clamp(2rem, 10vw, 6rem);
+	font-variant: small-caps slashed-zero;
+	position: sticky;
+	position: -webkit-sticky;
+	top: 0;
+	overflow: none;
+	z-index: 2;
+	margin: 0 auto;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
@@ -44,8 +57,9 @@
     box-shadow: #ffffff;
 }
 
-
-/* ! Slider Element -- to be exported / used as Prop */
+.name-field {
+    margin: 0 20vw;
+}
 
 .form-element {
     display: flex;
