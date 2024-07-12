@@ -6,6 +6,7 @@ import "../App.css"
 import notes from "../assets/notes.js";
 import * as Tone from "tone";
 import { toast } from "react-toastify";
+import { baseUrl } from "../config";
 
 function Tinker() {
 	const { synthId } = useParams();
@@ -23,7 +24,7 @@ function Tinker() {
 			try {
 				const token = localStorage.getItem("token");
 				const response = await axios.get(
-					`http://localhost:8000/api/synths/${synthId}/`,
+					`${baseUrl}/synths/${synthId}/`,
 					{ headers: { Authorization: `Bearer ${token}` } }
 				);
 				setFormData(response.data);
@@ -101,7 +102,7 @@ function Tinker() {
 		try {
 			const token = localStorage.getItem("token");
 			const { data } = await axios.put(
-				`http://localhost:8000/api/synths/${synthId}/`,
+				`${baseUrl}/synths/${synthId}/`,
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -117,7 +118,7 @@ function Tinker() {
 	async function handleDelete() {
 		try {
 			const token = localStorage.getItem("token");
-			await axios.delete(`http://localhost:8000/api/synths/${synthId}/`, {
+			await axios.delete(`${baseUrl}/synths/${synthId}/`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			toast.success("Synth deleted!");

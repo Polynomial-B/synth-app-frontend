@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../styles/Collection.css";
+import { baseUrl } from "../config";
 
 function Collection() {
 	const [collection, setCollection] = useState([]);
@@ -16,7 +17,7 @@ function Collection() {
 			try {
 				const token = localStorage.getItem("token");
 				const response = await axios.get(
-					`http://localhost:8000/api/synths/`,
+					`${baseUrl}/synths/`,
 					{
 						headers: { Authorization: `Bearer ${token}` },
 					}

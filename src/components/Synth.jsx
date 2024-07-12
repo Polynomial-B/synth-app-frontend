@@ -6,6 +6,7 @@ import * as Tone from "tone";
 import { toast } from "react-toastify";
 import notes from "../assets/notes.js";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
+import { baseUrl } from "../config";
 
 function Synth() {
 	const navigate = useNavigate();
@@ -131,7 +132,7 @@ function Synth() {
 		try {
 			const token = localStorage.getItem("token");
 			const { data } = await axios.post(
-				`http://localhost:8000/api/synths/`,
+				`${baseUrl}/api/synths/`,
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },

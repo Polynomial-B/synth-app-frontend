@@ -1,9 +1,10 @@
-import { useState } from "react"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify'
-import '../styles/Forms.css'
+import { toast } from 'react-toastify';
+import '../styles/Forms.css';
+import { baseUrl } from "../config";
 
 function Signup() {
 
@@ -27,7 +28,7 @@ function Signup() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:8000/api/auth/register/`, formData);
+            await axios.post(`${baseUrl}/auth/register/`, formData);
             toast.success('Signup successful');
             navigate('/auth/login');
             

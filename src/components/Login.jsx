@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/Forms.css";
+import { baseUrl } from "../config";
 
 function Login() {
 	const navigate = useNavigate();
@@ -23,7 +24,7 @@ function Login() {
 		e.preventDefault();
 		try {
 			const { data } = await axios.post(
-				`http://localhost:8000/api/auth/login/`,
+				`${baseUrl}/auth/login/`,
 				formData
 			);
 			toast.success(`Welcome, ${formData.username}`);
