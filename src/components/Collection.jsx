@@ -7,6 +7,10 @@ import "../styles/Collection.css";
 function Collection() {
 	const [collection, setCollection] = useState([]);
 
+  useEffect(()=> {
+    document.title = "Collection"
+  }, []);
+
 	useEffect(() => {
 		async function fetchCollection() {
 			try {
@@ -24,6 +28,8 @@ function Collection() {
 		}
 		fetchCollection();
 	}, []);
+
+
 
 	return (
 		<>
