@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../styles/Collection.css";
 import { baseUrl } from "../config";
-
+ 
 function Collection() {
 	const [collection, setCollection] = useState([]);
 
