@@ -73,9 +73,7 @@ function Synth() {
 	useEffect(() => {
 		return () => {
 			async function dispose() {
-                console.log("HEllooo")
 				Synth.dispose();
-
 			}
 			dispose();
 		};
@@ -130,9 +128,10 @@ function Synth() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
+            console.log(formData)
 			const token = localStorage.getItem("token");
 			const { data } = await axios.post(
-				`${baseUrl}/api/synths/`,
+				`${baseUrl}/synths/`,
 				formData,
 				{
 					headers: { Authorization: `Bearer ${token}` },
@@ -141,6 +140,7 @@ function Synth() {
 			toast.success("Synth added to your collection!");
 			navigate("/collection");
 		} catch (err) {
+            console.log(err)
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}
