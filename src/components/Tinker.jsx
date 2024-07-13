@@ -213,7 +213,6 @@ function Tinker() {
 							onChange={(e) => handleChange(e)}
 							value={formData.effects.distortion}
 						/>
-						<span>{formData.effects.distortion}</span>
 					</div>
 				</div>
 

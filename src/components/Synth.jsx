@@ -11,6 +11,7 @@ import { baseUrl } from "../config";
 function Synth() {
 	const navigate = useNavigate();
 	const [gridSize, setGridSize] = useState(8);
+    const [isNotes, setIsNotes] = useState(true)
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
@@ -20,10 +21,10 @@ function Synth() {
             { chorus: [4, 8, 0.6] },
 
         ],
-		freqs: [220, 2, 2, 2],
+		freqs: notes,
 	});
 
-    console.log(formData.waveform)
+    console.log(formData.freqs)
     // console.log('Attack', (formData.a_d_s_r[0])/1000)
     // console.log('Decay', (formData.a_d_s_r[1])/1000)
     // console.log('Sustain', (formData.a_d_s_r[2])/1000)
@@ -46,10 +47,11 @@ function Synth() {
 		formData.effects[1].chorus[2]
 	).start();
 
-	const limiter = new Tone.Limiter(-6);
-	const dist = new Tone.Distortion(formData.effects.distortion);
-	// const compressor = new Tone.Compressor(-30, 3);
-
+    const volume = formData.waveform !== "sine" ? -16 : 0;
+	const limiter = new Tone.Limiter(-64);
+	const dist = new Tone.Distortion(formData.effects.distortion, 1);
+	const compressor = new Tone.Compressor(-30, 9);
+    // const feedbackDelay = newTone.feedbackDelay();
 
 	const Synth = new Tone.Synth({
 		oscillator: {
@@ -61,14 +63,13 @@ function Synth() {
 			sustain: formData.a_d_s_r[2] / 1000,
 			release: formData.a_d_s_r[3] / 1000,
 		},
-
-	})
-    Synth
-    .connect(dist)
-    .connect(chorus)
-    // .connect(compressor)
-    .connect(limiter)
-    .toDestination();
+        volume: volume
+	}).chain(dist, chorus, compressor, limiter).toDestination()
+    // .connect(dist).toDestination()
+    // .connect(chorus).toDestination()
+    // .connect(compressor).toDestination()
+    // .connect(limiter).toDestination()
+    // .toDestination();
 
 	useEffect(() => {
 		return () => {
@@ -101,6 +102,16 @@ function Synth() {
 		sustain: 2,
 		release: 3,
 	};
+
+    function handleIsNotes() {
+        if (isNotes) {
+            setIsNotes(false)
+            console.log(isNotes)
+        } else {
+            setIsNotes(true)
+            console.log(isNotes)
+        }
+    }
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -165,13 +176,11 @@ function Synth() {
 				</div>
                 <div className="field">
 					<label className="label">Waveform</label>
-					<div className="control">
+					<div className="select is-primary">
 						<select
 							type="select"
 							name="waveform"
-                            
 							onChange={(e) => handleChange(e)}
-							
 						>
                         {oscillatorTypes.map((type, index)=>
                         <option key={index} value={type}>
@@ -181,21 +190,20 @@ function Synth() {
 					</div>
 				</div>
 				<div className="field">
-					<label className="label">Attack (ms)</label>
+					<label className="label">Attack</label>
 					<div className="control">
 						<input
 							type="range"
-							min="10"
+							min="100"
 							max="2000"
 							name="attack"
 							onChange={(e) => handleChange(e, 0)}
 							value={formData.a_d_s_r[0]}
 						/>
-						<span>{formData.a_d_s_r[0]} ms</span>
 					</div>
 				</div>
 				<div className="field">
-					<label className="label">Decay (ms)</label>
+					<label className="label">Decay</label>
 					<div className="control">
 						<input
 							type="range"
@@ -205,11 +213,10 @@ function Synth() {
 							onChange={(e) => handleChange(e, 1)}
 							value={formData.a_d_s_r[1]}
 						/>
-						<span>{formData.a_d_s_r[1]} ms</span>
 					</div>
 				</div>
 				<div className="field">
-					<label className="label">Sustain (ms)</label>
+					<label className="label">Sustain</label>
 					<div className="control">
 						<input
 							type="range"
@@ -219,11 +226,10 @@ function Synth() {
 							onChange={(e) => handleChange(e, 2)}
 							value={formData.a_d_s_r[2]}
 						/>
-						<span>{formData.a_d_s_r[2]} ms</span>
 					</div>
 				</div>
 				<div className="field">
-					<label className="label">Release (ms)</label>
+					<label className="label">Release</label>
 					<div className="control">
 						<input
 							type="range"
@@ -233,7 +239,6 @@ function Synth() {
 							onChange={(e) => handleChange(e, 3)}
 							value={formData.a_d_s_r[3]}
 						/>
-						<span>{formData.a_d_s_r[3]} ms</span>
 					</div>
 				</div>
 				<div className="field">
@@ -245,9 +250,8 @@ function Synth() {
 							max="999"
 							name="distortion"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects.distortion}
+							value={formData.effects[0].distortion}
 						/>
-						<span>{formData.effects.distortion}</span>
 					</div>
 				</div>
 				<div className="field">
@@ -259,9 +263,8 @@ function Synth() {
 							max="99"
 							name="distortion"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects.distortion}
+							value={formData.effects[1].chorus}
 						/>
-						<span>{formData.effects.distortion}</span>
 					</div>
 				</div>
 
@@ -269,7 +272,7 @@ function Synth() {
 					Create Synth
 				</button>
 			</form>
-
+            <button className="button" onClick={handleIsNotes}>{isNotes? "Hz active" : "Notes active"}</button>
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
 					<div
@@ -282,7 +285,7 @@ function Synth() {
                         onTouchEnd={() => handleMouseOff()}
 
 					>
-						{notes[index]}
+						{notes[index-1]}
 					</div>
 				))}
 			</div>
