@@ -4,33 +4,34 @@ import axios from "axios";
 import "../styles/Synth.css";
 import * as Tone from "tone";
 import { toast } from "react-toastify";
+import { baseUrl } from "../config";
+
 import notes from "../assets/notes.js";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
-import { baseUrl } from "../config";
+import warpFrequencies from "../assets/warpFrequencies.js";
 
 function Synth() {
 	const navigate = useNavigate();
 	const [gridSize, setGridSize] = useState(8);
-    const [isNotes, setIsNotes] = useState(true)
+	const [isNotes, setIsNotes] = useState(true);
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
-        waveform: "sine",
+		waveform: "sine",
 		effects: [
-            { distortion: 0.5 },
+            { distortion: 1 },
             { chorus: [4, 8, 0.6] },
-
+            { feedback: [0.01, 0.5]}
         ],
-		freqs: notes,
+		freqs: warpFrequencies,
 	});
 
-    console.log(formData.freqs)
-    // console.log('Attack', (formData.a_d_s_r[0])/1000)
-    // console.log('Decay', (formData.a_d_s_r[1])/1000)
-    // console.log('Sustain', (formData.a_d_s_r[2])/1000)
-    // console.log('Release', (formData.a_d_s_r[3])/1000)
+    const [warpFreqs, setWarpFreqs] = useState(warpFrequencies)
 
-
+    console.log(formData)
+    console.log(formData.effects[1].chorus)
+    console.log('feedback', formData.effects[2].feedback)
+    console.log('feedback', formData.effects[2].feedback[0])
 
 	useEffect(() => {
 		document.title = "Create Synth";
@@ -41,35 +42,38 @@ function Synth() {
 		(_, index) => index + 1
 	);
 
-	const chorus = new Tone.Chorus(
-		formData.effects[1].chorus[0],
-		formData.effects[1].chorus[1],
-		formData.effects[1].chorus[2]
-	).start();
 
-    const volume = formData.waveform !== "sine" ? -16 : 0;
-	const limiter = new Tone.Limiter(-64);
-	const dist = new Tone.Distortion(formData.effects.distortion, 1);
-	const compressor = new Tone.Compressor(-30, 9);
-    // const feedbackDelay = newTone.feedbackDelay();
+
+    // ! Note: be careful when manipulating the 'volume' parameter below:
+	const volume = formData.waveform !== "sine" ? -24 : -12;
+
+	const limiter = new Tone.Limiter(-64).toDestination()
+	const distortion = new Tone.Distortion((formData.effects[0].distortion/1000), "2x").connect(limiter);
+	const compressor = new Tone.Compressor(-30, 9).connect(distortion)
+	const feedbackDelay = new Tone.FeedbackDelay({
+        delayTime: `${formData.effects[2].feedback[0]}n.`,
+        feedback: `${formData.effects[2].feedback[1]}`,
+    }).connect(compressor)
+
+    const chorus = new Tone.Chorus(
+    formData.effects[1].chorus[0],
+    formData.effects[1].chorus[1],
+    formData.effects[1].chorus[2]
+    ).start();
 
 	const Synth = new Tone.Synth({
 		oscillator: {
-            type: formData.waveform
-        },
-        envelope: {
-            attack: formData.a_d_s_r[0] / 1000,
+			type: formData.waveform,
+		},
+		envelope: {
+			attack: formData.a_d_s_r[0] / 1000,
 			decay: formData.a_d_s_r[1] / 1000,
 			sustain: formData.a_d_s_r[2] / 1000,
 			release: formData.a_d_s_r[3] / 1000,
 		},
-        volume: volume
-	}).chain(dist, chorus, compressor, limiter).toDestination()
-    // .connect(dist).toDestination()
-    // .connect(chorus).toDestination()
-    // .connect(compressor).toDestination()
-    // .connect(limiter).toDestination()
-    // .toDestination();
+		volume: volume,
+	}).connect(feedbackDelay)
+
 
 	useEffect(() => {
 		return () => {
@@ -91,10 +95,9 @@ function Synth() {
 		}
 	}
 
-    function handleMouseOff() {
-        Synth.triggerRelease();
-    }
-
+	function handleMouseOff() {
+		Synth.triggerRelease();
+	}
 
 	const formMappings = {
 		attack: 0,
@@ -103,15 +106,20 @@ function Synth() {
 		release: 3,
 	};
 
-    function handleIsNotes() {
-        if (isNotes) {
-            setIsNotes(false)
-            console.log(isNotes)
-        } else {
-            setIsNotes(true)
-            console.log(isNotes)
-        }
-    }
+	function handleIsNotes() {
+		const newFormData = structuredClone(formData);
+		if (isNotes) {
+			setIsNotes(false);
+			newFormData.freqs = warpFreqs;
+			setFormData(newFormData);
+			console.log(newFormData.freqs);
+		} else {
+			setIsNotes(true);
+			newFormData.freqs = notes;
+			console.log(newFormData.freqs);
+            setFormData(newFormData);
+		}
+	}
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -126,12 +134,17 @@ function Synth() {
 		} else if (name === "name") {
 			newFormData.name = value;
 		} else if (name === "waveform") {
-            newFormData.waveform = value;
-        } else if (name === "distortion") {
-			newFormData.effects[0].distortion = value;
-            console.log('Distortion', newFormData.effects[0].distortion)
+			newFormData.waveform = value;
+		} else if (name === "distortion") {
+			newFormData.effects[0].distortion = parseInt(value, 10);
+			console.log("Distortion", newFormData.effects[0].distortion);
 		} else if (name === "chorus") {
 			newFormData.effects[1].chorus = value;
+		} else if (name === "delay") {
+            newFormData.effects[2].feedback[0] = value;
+        } else if (name === "freqs") {
+			newFormData.freqs = name;
+			console.log("Hello");
 		}
 		setFormData(newFormData);
 	}
@@ -139,19 +152,15 @@ function Synth() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
-            console.log(formData)
+			console.log(formData);
 			const token = localStorage.getItem("token");
-			const { data } = await axios.post(
-				`${baseUrl}/synths/`,
-				formData,
-				{
-					headers: { Authorization: `Bearer ${token}` },
-				}
-			);
+			const { data } = await axios.post(`${baseUrl}/synths/`, formData, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
 			toast.success("Synth added to your collection!");
 			navigate("/collection");
 		} catch (err) {
-            console.log(err)
+			console.log(err);
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}
@@ -174,7 +183,7 @@ function Synth() {
 						/>
 					</div>
 				</div>
-                <div className="field">
+				<div className="field">
 					<label className="label">Waveform</label>
 					<div className="select is-primary">
 						<select
@@ -182,11 +191,12 @@ function Synth() {
 							name="waveform"
 							onChange={(e) => handleChange(e)}
 						>
-                        {oscillatorTypes.map((type, index)=>
-                        <option key={index} value={type}>
-                            {type}
-                        </option>)}
-                        </select>
+							{oscillatorTypes.map((type, index) => (
+								<option key={index} value={type}>
+									{type}
+								</option>
+							))}
+						</select>
 					</div>
 				</div>
 				<div className="field">
@@ -194,8 +204,8 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="100"
-							max="2000"
+							min="10"
+							max="5000"
 							name="attack"
 							onChange={(e) => handleChange(e, 0)}
 							value={formData.a_d_s_r[0]}
@@ -220,7 +230,7 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="10"
+							min="1"
 							max="999"
 							name="sustain"
 							onChange={(e) => handleChange(e, 2)}
@@ -233,8 +243,8 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="0"
-							max="2000"
+							min="1"
+							max="5000"
 							name="release"
 							onChange={(e) => handleChange(e, 3)}
 							value={formData.a_d_s_r[3]}
@@ -246,11 +256,11 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="0"
+							min="1"
 							max="999"
 							name="distortion"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects[0].distortion}
+							value={formData.effects[0].distortion[0]}
 						/>
 					</div>
 				</div>
@@ -259,33 +269,54 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="0"
+							min="1"
 							max="99"
-							name="distortion"
+							name="chorus"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects[1].chorus}
+							value={formData.effects[1].chorus[0]}
+						/>
+					</div>
+				</div>
+                <div className="field">
+					<label className="label">Delay</label>
+					<div className="control">
+						<input
+							type="range"
+							min="1"
+							max="5"
+							name="delay"
+							onChange={(e) => handleChange(e)}
+							value={formData.effects[2].feedback[0]}
 						/>
 					</div>
 				</div>
 
-				<button className="button" type="submit">
-					Create Synth
+				<button
+					className="button"
+					name="freqs"
+					type="button"
+					onClick={handleIsNotes}
+				>
+					{isNotes ? "Notes active" : "Warp active"}
+				</button>
+				<button className="button is-danger" type="submit">
+					Save Settings
 				</button>
 			</form>
-            <button className="button" onClick={handleIsNotes}>{isNotes? "Hz active" : "Notes active"}</button>
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
 					<div
 						key={index}
-						className="grid-item"
-                        onMouseDown={(e) => handleClick(e)}
-                        onMouseUp={(e) => handleMouseOff(e)}
-                        onMouseLeave={handleMouseOff}
-                        onTouchStart={() => handleClick()}
-                        onTouchEnd={() => handleMouseOff()}
-
+						name="freqs"
+						className="freq-grid-item"
+						onMouseDown={(e) => handleClick(e)}
+						onMouseUp={(e) => handleMouseOff(e)}
+						onMouseLeave={handleMouseOff}
+						onTouchStart={(e) => handleClick(e)}
+						onTouchEnd={() => handleMouseOff()}
+						onChange={(e) => handleChange(e)}
 					>
-						{notes[index-1]}
+						{(formData.freqs[index - 1]/100)}
 					</div>
 				))}
 			</div>

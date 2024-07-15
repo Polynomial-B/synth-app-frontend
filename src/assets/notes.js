@@ -31,6 +31,7 @@ const notes = [
 	"F4",
 	"F#4",
 	"G4",
+	"A4"
 ];
 
 export default notes;
