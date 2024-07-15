@@ -28,8 +28,10 @@ function Synth() {
 
     const [warpFreqs, setWarpFreqs] = useState(warpFrequencies)
 
+    console.clear()
     console.log(formData)
-    console.log(formData.effects[1].chorus)
+    console.log('distortion', formData.effects[0].distortion)
+    console.log('chorus', formData.effects[1].chorus)
     console.log('feedback', formData.effects[2].feedback)
     console.log('feedback', formData.effects[2].feedback[0])
 
@@ -59,7 +61,7 @@ function Synth() {
     formData.effects[1].chorus[0],
     formData.effects[1].chorus[1],
     formData.effects[1].chorus[2]
-    ).start();
+    ).connect(feedbackDelay);
 
 	const Synth = new Tone.Synth({
 		oscillator: {
@@ -72,7 +74,7 @@ function Synth() {
 			release: formData.a_d_s_r[3] / 1000,
 		},
 		volume: volume,
-	}).connect(feedbackDelay)
+	}).connect(chorus)
 
 
 	useEffect(() => {
@@ -137,14 +139,13 @@ function Synth() {
 			newFormData.waveform = value;
 		} else if (name === "distortion") {
 			newFormData.effects[0].distortion = parseInt(value, 10);
-			console.log("Distortion", newFormData.effects[0].distortion);
+			console.log("Distortion change", newFormData.effects[0].distortion);
 		} else if (name === "chorus") {
 			newFormData.effects[1].chorus = value;
 		} else if (name === "delay") {
             newFormData.effects[2].feedback[0] = value;
         } else if (name === "freqs") {
 			newFormData.freqs = name;
-			console.log("Hello");
 		}
 		setFormData(newFormData);
 	}
@@ -152,7 +153,6 @@ function Synth() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
-			console.log(formData);
 			const token = localStorage.getItem("token");
 			const { data } = await axios.post(`${baseUrl}/synths/`, formData, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -170,7 +170,7 @@ function Synth() {
 			<h2 className="synth-header">{formData.name}</h2>
 			{/* <div className="grid-container settings-grid-container"> */}
 
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} className="form">
 				<div className="name-field field">
 					<label className="label">Name</label>
 					<div className="control">
@@ -199,10 +199,12 @@ function Synth() {
 						</select>
 					</div>
 				</div>
-				<div className="field">
+        <div className="slide-settings-container">
+				<div className="settings-grid-container field">
 					<label className="label">Attack</label>
-					<div className="control">
+					<div className="control form-element">
 						<input
+            className="control-form-input"
 							type="range"
 							min="10"
 							max="5000"
@@ -217,7 +219,7 @@ function Synth() {
 					<div className="control">
 						<input
 							type="range"
-							min="10"
+							min="1"
 							max="2000"
 							name="decay"
 							onChange={(e) => handleChange(e, 1)}
@@ -260,7 +262,7 @@ function Synth() {
 							max="999"
 							name="distortion"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects[0].distortion[0]}
+							value={formData.effects[0].distortion}
 						/>
 					</div>
 				</div>
@@ -273,7 +275,7 @@ function Synth() {
 							max="99"
 							name="chorus"
 							onChange={(e) => handleChange(e)}
-							value={formData.effects[1].chorus[0]}
+							value={formData.effects[1].chorus}
 						/>
 					</div>
 				</div>
@@ -290,19 +292,20 @@ function Synth() {
 						/>
 					</div>
 				</div>
-
+        </div>
 				<button
 					className="button"
 					name="freqs"
 					type="button"
 					onClick={handleIsNotes}
-				>
+          >
 					{isNotes ? "Notes active" : "Warp active"}
 				</button>
 				<button className="button is-danger" type="submit">
 					Save Settings
 				</button>
 			</form>
+          {/* </div> */}
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
 					<div
@@ -313,10 +316,10 @@ function Synth() {
 						onMouseUp={(e) => handleMouseOff(e)}
 						onMouseLeave={handleMouseOff}
 						onTouchStart={(e) => handleClick(e)}
-						onTouchEnd={() => handleMouseOff()}
+						onTouchEnd={handleMouseOff}
 						onChange={(e) => handleChange(e)}
 					>
-						{(formData.freqs[index - 1]/100)}
+						{(formData.freqs[index-1]/100)}
 					</div>
 				))}
 			</div>
