@@ -7,8 +7,6 @@ import * as Tone from "tone";
 import { toast } from "react-toastify";
 import { baseUrl } from "../config";
 
-
-import notes from "../assets/notes.js";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
 import warpFrequencies from "../assets/warpFrequencies.js";
 

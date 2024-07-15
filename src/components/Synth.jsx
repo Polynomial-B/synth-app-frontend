@@ -6,7 +6,6 @@ import * as Tone from "tone";
 import { toast } from "react-toastify";
 import { baseUrl } from "../config";
 
-import notes from "../assets/notes.js";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
 import warpFrequencies from "../assets/warpFrequencies.js";
 
@@ -14,13 +13,15 @@ function Synth() {
 	const navigate = useNavigate();
 	const [gridSize, setGridSize] = useState(8);
 	const [isNotes, setIsNotes] = useState(true);
+	const [divisions, setDivisions] = useState(12)
+	const [temperament, setTemperament] = useState()
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
 		waveform: "sine",
 		effects: [
 			{ distortion: 1 },
-			{ chorus: [4, 8, 0.6] },
+			{ chorus: [4, 0, 0.0] },
 			{ feedback: [0.01, 0.5] },
 		],
 		freqs: warpFrequencies,
@@ -28,12 +29,12 @@ function Synth() {
 
 	const [warpFreqs, setWarpFreqs] = useState(warpFrequencies);
 
-	console.clear();
-	console.log(formData);
-	console.log("distortion", formData.effects[0].distortion);
-	console.log("chorus", formData.effects[1].chorus);
-	console.log("feedback", formData.effects[2].feedback);
-	console.log("feedback", formData.effects[2].feedback[0]);
+	// console.log(formData);
+	// console.log("distortion", formData.effects[0].distortion);
+	// console.log("susta", formData.a_d_s_r[2] / 1000);
+	// console.log("chorus", formData.effects[1].chorus);
+	// console.log("feedback", formData.effects[2].feedback);
+	// console.log("feedback", formData.effects[2].feedback[0]);
 
 	useEffect(() => {
 		document.title = "Create Synth";
@@ -114,11 +115,9 @@ function Synth() {
 			setIsNotes(false);
 			newFormData.freqs = warpFreqs;
 			setFormData(newFormData);
-			console.log(newFormData.freqs);
 		} else {
 			setIsNotes(true);
-			newFormData.freqs = notes;
-			console.log(newFormData.freqs);
+			newFormData.freqs = warpFreqs;
 			setFormData(newFormData);
 		}
 	}
@@ -163,6 +162,43 @@ function Synth() {
 			console.log(err);
 			toast.error("Sorry, we have encountered an error!");
 		}
+	}
+
+	function handleWarp(e) {
+		function updateFreqArray() {
+
+			let equalTemperament = divisions
+			
+			if (e.target.value === "+") {
+				equalTemperament += 1
+				console.log(equalTemperament)
+				setDivisions(equalTemperament)
+			} else if (e.target.value === "-") {
+				equalTemperament -= 1
+				console.log(equalTemperament)
+				setDivisions(equalTemperament)
+			}
+
+			function calculateEqualTemperament() {
+				setTemperament(2 ** (1/equalTemperament))
+			}
+			calculateEqualTemperament()
+			console.log('temp ,', temperament)
+
+
+
+			let newArray = [11000];
+			for (let i = 0; i < 32; i++) {
+				newArray.push(Math.round(newArray[i] * temperament));
+
+			}
+			console.log("newArray ", newArray);
+			setWarpFreqs(newArray)
+			const newFormData = structuredClone(formData)
+			newFormData.freqs = newArray
+			setFormData(newFormData)
+		}
+		updateFreqArray()
 	}
 
 	return (
@@ -313,6 +349,29 @@ function Synth() {
 				>
 					{isNotes ? "Notes active" : "Warp active"}
 				</button>
+				{!isNotes ? (
+					<button
+						className="button"
+						name="more-notes"
+						type="button"
+						onClick={(e) => handleWarp(e)}
+						value="+"
+					>
+						+
+					</button>
+				) : null}
+				<div className="button">{divisions}</div>
+				{!isNotes ? (
+					<button
+						className="button"
+						name="less-notes"
+						type="button"
+						onClick={(e) => handleWarp(e)}
+						value="-"
+					>
+						-
+					</button>
+				) : null}
 				<button className="button is-danger" type="submit">
 					Save Settings
 				</button>
