@@ -106,7 +106,7 @@ footer {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	background-color: rgb(245, 255, 108);
+	background-color: rgb(252, 237, 64);
 	
 }
 
@@ -126,7 +126,7 @@ footer {
 	margin: 0;
 }
 
-button {
+.button {
 	margin: 0 1vw;
 }
 

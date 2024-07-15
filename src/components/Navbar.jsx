@@ -33,19 +33,19 @@ function Navbar() {
 				<div className="navbar-main">YNTH</div>
 				
 				<div id="navbar-links">
-                <Link to="/" className="button is-link is-outlined" draggable="false">
+                <Link to="/" className="button" draggable="false">
 					Home
 				</Link>
-				{isLoggedIn &&<Link to="/synth" className="button is-warning is-link" draggable="false">
+				{isLoggedIn &&<Link to="/synth" className="button" draggable="false">
 					Create Synth
 				</Link>}
-				{!isLoggedIn &&<Link to="/auth/signup" className="button is-link" draggable="false">
+				{!isLoggedIn &&<Link to="/auth/signup" className="button" draggable="false">
 					Signup
 				</Link>}
-				{!isLoggedIn &&<Link to="/auth/login" className="button is-link" draggable="false">
+				{!isLoggedIn &&<Link to="/auth/login" className="button" draggable="false">
 					Login
 				</Link>}
-				{isLoggedIn &&<Link to="/collection" className="button is-link" draggable="false">
+				{isLoggedIn &&<Link to="/collection" className="button" draggable="false">
 					Collection
 				</Link>}
 				{isLoggedIn &&<button className="button" onClick={logout}>Logout</button>}
