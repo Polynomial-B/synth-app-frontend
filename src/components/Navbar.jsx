@@ -28,9 +28,9 @@ function Navbar() {
 				<div className="static-navbar-left-content">S</div>
 			</div>
 			<div className="navbar-container">
-            <div className="navbar-main">OSING</div>
-				<div className="navbar-main">HURSDAY</div>
-				<div className="navbar-main">ANITY</div>
+            <div className="navbar-main">ITTLE</div>
+				<div className="navbar-main">OY</div>
+				<div className="navbar-main">YNTH</div>
 				
 				<div id="navbar-links">
                 <Link to="/" className="button is-link is-outlined" draggable="false">

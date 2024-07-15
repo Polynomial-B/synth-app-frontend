@@ -19,21 +19,21 @@ function Synth() {
 		a_d_s_r: [100, 200, 999, 300],
 		waveform: "sine",
 		effects: [
-            { distortion: 1 },
-            { chorus: [4, 8, 0.6] },
-            { feedback: [0.01, 0.5]}
-        ],
+			{ distortion: 1 },
+			{ chorus: [4, 8, 0.6] },
+			{ feedback: [0.01, 0.5] },
+		],
 		freqs: warpFrequencies,
 	});
 
-    const [warpFreqs, setWarpFreqs] = useState(warpFrequencies)
+	const [warpFreqs, setWarpFreqs] = useState(warpFrequencies);
 
-    console.clear()
-    console.log(formData)
-    console.log('distortion', formData.effects[0].distortion)
-    console.log('chorus', formData.effects[1].chorus)
-    console.log('feedback', formData.effects[2].feedback)
-    console.log('feedback', formData.effects[2].feedback[0])
+	console.clear();
+	console.log(formData);
+	console.log("distortion", formData.effects[0].distortion);
+	console.log("chorus", formData.effects[1].chorus);
+	console.log("feedback", formData.effects[2].feedback);
+	console.log("feedback", formData.effects[2].feedback[0]);
 
 	useEffect(() => {
 		document.title = "Create Synth";
@@ -44,24 +44,25 @@ function Synth() {
 		(_, index) => index + 1
 	);
 
-
-
-    // ! Note: be careful when manipulating the 'volume' parameter below:
+	// ! Note: be careful when manipulating the 'volume' parameter below:
 	const volume = formData.waveform !== "sine" ? -24 : -12;
 
-	const limiter = new Tone.Limiter(-64).toDestination()
-	const distortion = new Tone.Distortion((formData.effects[0].distortion/1000), "2x").connect(limiter);
-	const compressor = new Tone.Compressor(-30, 9).connect(distortion)
+	const limiter = new Tone.Limiter(-64).toDestination();
+	const distortion = new Tone.Distortion(
+		formData.effects[0].distortion / 1000,
+		"2x"
+	).connect(limiter);
+	const compressor = new Tone.Compressor(-30, 9).connect(distortion);
 	const feedbackDelay = new Tone.FeedbackDelay({
-        delayTime: `${formData.effects[2].feedback[0]}n.`,
-        feedback: `${formData.effects[2].feedback[1]}`,
-    }).connect(compressor)
+		delayTime: `${formData.effects[2].feedback[0]}n.`,
+		feedback: `${formData.effects[2].feedback[1]}`,
+	}).connect(compressor);
 
-    const chorus = new Tone.Chorus(
-    formData.effects[1].chorus[0],
-    formData.effects[1].chorus[1],
-    formData.effects[1].chorus[2]
-    ).connect(feedbackDelay);
+	const chorus = new Tone.Chorus(
+		formData.effects[1].chorus[0],
+		formData.effects[1].chorus[1],
+		formData.effects[1].chorus[2]
+	).connect(feedbackDelay);
 
 	const Synth = new Tone.Synth({
 		oscillator: {
@@ -74,8 +75,7 @@ function Synth() {
 			release: formData.a_d_s_r[3] / 1000,
 		},
 		volume: volume,
-	}).connect(chorus)
-
+	}).connect(chorus);
 
 	useEffect(() => {
 		return () => {
@@ -119,7 +119,7 @@ function Synth() {
 			setIsNotes(true);
 			newFormData.freqs = notes;
 			console.log(newFormData.freqs);
-            setFormData(newFormData);
+			setFormData(newFormData);
 		}
 	}
 
@@ -143,8 +143,8 @@ function Synth() {
 		} else if (name === "chorus") {
 			newFormData.effects[1].chorus = value;
 		} else if (name === "delay") {
-            newFormData.effects[2].feedback[0] = value;
-        } else if (name === "freqs") {
+			newFormData.effects[2].feedback[0] = value;
+		} else if (name === "freqs") {
 			newFormData.freqs = name;
 		}
 		setFormData(newFormData);
@@ -199,113 +199,125 @@ function Synth() {
 						</select>
 					</div>
 				</div>
-        <div className="slide-settings-container">
-				<div className="settings-grid-container field">
-					<label className="label">Attack</label>
-					<div className="control form-element">
-						<input
-            className="control-form-input"
-							type="range"
-							min="10"
-							max="5000"
-							name="attack"
-							onChange={(e) => handleChange(e, 0)}
-							value={formData.a_d_s_r[0]}
-						/>
+				<div className="slide-settings-container">
+					<div className="settings-grid-container field">
+						<label className="label">Attack</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="10"
+								max="5000"
+								name="attack"
+								onChange={(e) => handleChange(e, 0)}
+								value={formData.a_d_s_r[0]}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Decay</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="2000"
+								name="decay"
+								onChange={(e) => handleChange(e, 1)}
+								value={formData.a_d_s_r[1]}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Sustain</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="999"
+								name="sustain"
+								onChange={(e) => handleChange(e, 2)}
+								value={formData.a_d_s_r[2]}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Release</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="5000"
+								name="release"
+								onChange={(e) => handleChange(e, 3)}
+								value={formData.a_d_s_r[3]}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Distortion</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="999"
+								name="distortion"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[0].distortion}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Chorus</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="99"
+								name="chorus"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[1].chorus}
+							/>
+						</div>
+					</div>
+
+					<div className="settings-grid-container field">
+						<label className="label">Delay</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="5"
+								name="delay"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[2].feedback[0]}
+							/>
+						</div>
 					</div>
 				</div>
-				<div className="field">
-					<label className="label">Decay</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="2000"
-							name="decay"
-							onChange={(e) => handleChange(e, 1)}
-							value={formData.a_d_s_r[1]}
-						/>
-					</div>
-				</div>
-				<div className="field">
-					<label className="label">Sustain</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="999"
-							name="sustain"
-							onChange={(e) => handleChange(e, 2)}
-							value={formData.a_d_s_r[2]}
-						/>
-					</div>
-				</div>
-				<div className="field">
-					<label className="label">Release</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="5000"
-							name="release"
-							onChange={(e) => handleChange(e, 3)}
-							value={formData.a_d_s_r[3]}
-						/>
-					</div>
-				</div>
-				<div className="field">
-					<label className="label">Distortion</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="999"
-							name="distortion"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[0].distortion}
-						/>
-					</div>
-				</div>
-				<div className="field">
-					<label className="label">Chorus</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="99"
-							name="chorus"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[1].chorus}
-						/>
-					</div>
-				</div>
-                <div className="field">
-					<label className="label">Delay</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="5"
-							name="delay"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[2].feedback[0]}
-						/>
-					</div>
-				</div>
-        </div>
 				<button
 					className="button"
 					name="freqs"
 					type="button"
 					onClick={handleIsNotes}
-          >
+				>
 					{isNotes ? "Notes active" : "Warp active"}
 				</button>
 				<button className="button is-danger" type="submit">
 					Save Settings
 				</button>
 			</form>
-          {/* </div> */}
+			{/* </div> */}
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
 					<div
@@ -319,7 +331,7 @@ function Synth() {
 						onTouchEnd={handleMouseOff}
 						onChange={(e) => handleChange(e)}
 					>
-						{(formData.freqs[index-1]/100)}
+						{formData.freqs[index - 1] / 100}
 					</div>
 				))}
 			</div>

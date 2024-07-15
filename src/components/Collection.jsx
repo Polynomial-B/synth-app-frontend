@@ -55,6 +55,7 @@ function Collection() {
 									<div className="collection-name card">
 										<div>
 											<div className="container">{collection.name}</div>
+											<img src="https://3.bp.blogspot.com/-ajn-9ZveGms/Uim4czBNTgI/AAAAAAAAAWo/cbin6JlIv-w/s1600/Black-And-White-Small-Cat-HD-Wallpaper.jpg"/>
 										</div>
 									</div>
 								</Link>

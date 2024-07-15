@@ -230,95 +230,110 @@ function Tinker() {
 						</select>
 					</div>
 				</div>
-				<div className="field">
-					<label className="label">Attack</label>
-					<div className="control">
-						<input
-							type="range"
-							min="10"
-							max="5000"
-							name="attack"
-							onChange={(e) => handleChange(e, 0)}
-							value={formData.a_d_s_r[0]}
-						/>
+				<div className="slide-settings-container">
+					<div className="settings-grid-container field">
+						<label className="label">Attack</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="10"
+								max="5000"
+								name="attack"
+								onChange={(e) => handleChange(e, 0)}
+								value={formData.a_d_s_r[0]}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Decay</label>
-					<div className="control">
-						<input
-							type="range"
-							min="10"
-							max="2000"
-							name="decay"
-							onChange={(e) => handleChange(e, 1)}
-							value={formData.a_d_s_r[1]}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Decay</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="2000"
+								name="decay"
+								onChange={(e) => handleChange(e, 1)}
+								value={formData.a_d_s_r[1]}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Sustain</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="999"
-							name="sustain"
-							onChange={(e) => handleChange(e, 2)}
-							value={formData.a_d_s_r[2]}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Sustain</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="999"
+								name="sustain"
+								onChange={(e) => handleChange(e, 2)}
+								value={formData.a_d_s_r[2]}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Release</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="5000"
-							name="release"
-							onChange={(e) => handleChange(e, 3)}
-							value={formData.a_d_s_r[3]}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Release</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="5000"
+								name="release"
+								onChange={(e) => handleChange(e, 3)}
+								value={formData.a_d_s_r[3]}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Distortion</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="999"
-							name="distortion"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[0].distortion[0]}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Distortion</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="999"
+								name="distortion"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[0].distortion}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Chorus</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="99"
-							name="chorus"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[1].chorus}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Chorus</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="99"
+								name="chorus"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[1].chorus}
+							/>
+						</div>
 					</div>
-				</div>
-				<div className="field">
-					<label className="label">Delay</label>
-					<div className="control">
-						<input
-							type="range"
-							min="1"
-							max="5"
-							name="delay"
-							onChange={(e) => handleChange(e)}
-							value={formData.effects[2].feedback[0]}
-						/>
+
+					<div className="settings-grid-container field">
+						<label className="label">Delay</label>
+						<div className="control form-element">
+							<input
+								className="control-form-input"
+								type="range"
+								min="1"
+								max="5"
+								name="delay"
+								onChange={(e) => handleChange(e)}
+								value={formData.effects[2].feedback[0]}
+							/>
+						</div>
 					</div>
 				</div>
 
