@@ -14,7 +14,6 @@ function Synth() {
 	const [gridSize, setGridSize] = useState(8);
 	const [isNotes, setIsNotes] = useState(true);
 	const [divisions, setDivisions] = useState(12)
-	const [temperament, setTemperament] = useState()
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
@@ -171,26 +170,23 @@ function Synth() {
 			
 			if (e.target.value === "+") {
 				equalTemperament += 1
-				console.log(equalTemperament)
 				setDivisions(equalTemperament)
 			} else if (e.target.value === "-") {
 				equalTemperament -= 1
-				console.log(equalTemperament)
 				setDivisions(equalTemperament)
 			}
-
+			let temperament
 			function calculateEqualTemperament() {
-				setTemperament(2 ** (1/equalTemperament))
+				temperament = (2 ** (1/equalTemperament))
 			}
 			calculateEqualTemperament()
 			console.log('temp ,', temperament)
 
 
-
 			let newArray = [11000];
 			for (let i = 0; i < 32; i++) {
 				newArray.push(Math.round(newArray[i] * temperament));
-
+				console.log(newArray)
 			}
 			console.log("newArray ", newArray);
 			setWarpFreqs(newArray)
