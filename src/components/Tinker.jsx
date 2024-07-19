@@ -9,12 +9,14 @@ import { baseUrl } from "../config";
 
 import oscillatorTypes from "../assets/oscillatorTypes.js";
 import warpFrequencies from "../assets/warpFrequencies.js";
-
+import FormSynthSettings from "./FormSynthSettings";
 
 
 function Tinker() {
 	const { synthId } = useParams();
 	const navigate = useNavigate();
+
+	const [divisions, setDivisions] = useState(12)
 	const [gridSize, setGridSize] = useState(8);
 	const [isNotes, setIsNotes] = useState(true);
 	const [formData, setFormData] = useState({
@@ -28,6 +30,7 @@ function Tinker() {
         ],
 		freqs: warpFrequencies,
 	});
+	const [warpFreqs, setWarpFreqs] = useState(warpFrequencies);
 
 	useEffect(() => {
 		document.title = "Synth Adjustments";
@@ -43,7 +46,6 @@ function Tinker() {
 					{ headers: { Authorization: `Bearer ${token}` } }
 				);
 				setFormData(response.data);
-				console.log(response.data)
 			} catch (error) {
 				toast.error("Error unpacking synth");
 			}
@@ -126,11 +128,11 @@ function Tinker() {
 			setIsNotes(false);
 			newFormData.freqs = warpFrequencies;
 			setFormData(newFormData);
-			console.log(newFormData.freqs);
+			console.log('false ', newFormData.freqs);
 		} else {
 			setIsNotes(true);
 			newFormData.freqs = notes;
-			console.log(newFormData.freqs);
+			console.log('true ', newFormData.freqs);
             setFormData(newFormData);
 		}
 	}
@@ -193,160 +195,56 @@ function Tinker() {
 		}
 	}
 
+	function handleWarp(e) {
+		function updateFreqArray() {
+
+			let equalTemperament = divisions
+			
+			if (e.target.value === "+") {
+				equalTemperament += 1
+				setDivisions(equalTemperament)
+			} else if (e.target.value === "-") {
+				equalTemperament -= 1
+				setDivisions(equalTemperament)
+			}
+			let temperament
+			function calculateEqualTemperament() {
+				temperament = (2 ** (1/equalTemperament))
+			}
+			calculateEqualTemperament()
+			console.log('temp ,', temperament)
+
+
+			let newArray = [11000];
+			for (let i = 0; i < 32; i++) {
+				newArray.push(Math.round(newArray[i] * temperament));
+				console.log(newArray)
+			}
+			console.log("newArray ", newArray);
+			setWarpFreqs(newArray)
+			const newFormData = structuredClone(formData)
+			newFormData.freqs = newArray
+			setFormData(newFormData)
+		}
+		updateFreqArray()
+	}
+
 	return (
 		<>
 			<h2 className="synth-header">{formData.name}</h2>
 			{/* <div className="grid-container settings-grid-container"> */}
 
-			<form onSubmit={handleSubmit}>
-				<div className="name-field field">
-					<label className="label">Name</label>
-					<div className="control">
-						<input
-							className="input"
-							type="text"
-							name="name"
-							onChange={handleChange}
-							value={formData.name}
-						/>
-					</div>
-				</div>
-				<div className="field">
-					<label className="label">Waveform</label>
-					<div className="select is-primary">
-						<select
-							type="select"
-							name="waveform"
-							onChange={(e) => handleChange(e)}
-							value={formData.waveform}
-						>
-							{oscillatorTypes.map((type, index) => (
-								<option key={index} value={type}>
-									{type}
-								</option>
-							))}
-						</select>
-					</div>
-				</div>
-				<div className="slide-settings-container">
-					<div className="settings-grid-container field">
-						<label className="label">Attack</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="10"
-								max="5000"
-								name="attack"
-								onChange={(e) => handleChange(e, 0)}
-								value={formData.a_d_s_r[0]}
-							/>
-						</div>
-					</div>
+			<FormSynthSettings 
+			handleChange={handleChange}
+			handleSubmit={handleSubmit}
+			handleIsNotes={handleIsNotes}
+			isNotes={isNotes}
+			handleWarp={handleWarp}
+			formData={formData}
+			oscillatorTypes={oscillatorTypes}
+			divisions={divisions}
+			/>
 
-					<div className="settings-grid-container field">
-						<label className="label">Decay</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="2000"
-								name="decay"
-								onChange={(e) => handleChange(e, 1)}
-								value={formData.a_d_s_r[1]}
-							/>
-						</div>
-					</div>
-
-					<div className="settings-grid-container field">
-						<label className="label">Sustain</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="999"
-								name="sustain"
-								onChange={(e) => handleChange(e, 2)}
-								value={formData.a_d_s_r[2]}
-							/>
-						</div>
-					</div>
-
-					<div className="settings-grid-container field">
-						<label className="label">Release</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="5000"
-								name="release"
-								onChange={(e) => handleChange(e, 3)}
-								value={formData.a_d_s_r[3]}
-							/>
-						</div>
-					</div>
-
-					<div className="settings-grid-container field">
-						<label className="label">Distortion</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="999"
-								name="distortion"
-								onChange={(e) => handleChange(e)}
-								value={formData.effects[0].distortion}
-							/>
-						</div>
-					</div>
-
-					<div className="settings-grid-container field">
-						<label className="label">Chorus</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="99"
-								name="chorus"
-								onChange={(e) => handleChange(e)}
-								value={formData.effects[1].chorus}
-							/>
-						</div>
-					</div>
-
-					<div className="settings-grid-container field">
-						<label className="label">Delay</label>
-						<div className="control form-element">
-							<input
-								className="control-form-input"
-								type="range"
-								min="1"
-								max="5"
-								name="delay"
-								onChange={(e) => handleChange(e)}
-								value={formData.effects[2].feedback[0]}
-							/>
-						</div>
-					</div>
-				</div>
-
-				<button
-					className="button"
-					name="freqs"
-					type="button"
-					onClick={handleIsNotes}
-				>
-					{isNotes ? "Notes active" : "Warp active"}
-				</button>
-				<button className="button is-danger" type="submit">
-					Save Settings
-				</button>
-			</form>
 			<button className="button is-danger" onClick={handleDelete}>
 				Delete Synth
 			</button>
