@@ -7,8 +7,6 @@
 	--footer-color: rgb(166, 117, 161);
 	--nav-buttons-color: rgb(206, 162, 172);
 
-
-
 	margin: 0 auto;
 	text-align: center;
 	font-family: Georgia, "Times New Roman", Times, serif;
@@ -25,6 +23,11 @@
 	-moz-user-select: none;
 }
 
+html {
+	background-color: rgb(143, 57, 133);
+}
+
+
 .home-header {
 	background-color: var(--background-color);
 	color: var(--header-color);
@@ -35,7 +38,7 @@
 	top: 0;
 	overflow: none;
 	z-index: 2;
-	/* margin: 0 auto; */
+	margin: 0 auto;
 }
 
 h2 {
@@ -43,6 +46,14 @@ h2 {
 	font-size: 1.5rem;
 	line-height: normal;
 	margin: 1em 0;
+	text-align: center;
+}
+
+p, h2 {
+	padding: 0 2rem;
+}
+p {
+	text-align: justify;
 }
 
 h5 {
@@ -54,10 +65,6 @@ h5 {
 	width: 100%;
 }
 
-p {
-	padding: 0 2em;
-	text-align: justify;
-}
 
 .navbar-container {
 	background-color: var(--navbar-color);
@@ -66,7 +73,12 @@ p {
 	align-items: flex-start;
 	height: 6.7em;
 	padding-left: 1.5em;
-	padding-top: 0;
+	padding-top: 0;}
+
+.navbar-container::after {
+	height: 2px;
+	background-color: #fff;
+
 }
 
 .static-navbar-left {
@@ -92,9 +104,10 @@ p {
 	font-size: 2em;
 	height: 1em;
 	color: var(--footer-color);
-	padding: 0;
+	padding: 0 0 0 2px;
 	user-select: none;
 	-moz-user-select: none;
+	letter-spacing: 1px;
 }
 
 #navbar-links {
@@ -144,6 +157,10 @@ footer {
 	background-color: var(--nav-buttons-color);
 	color: rgb(43, 43, 43);
 	box-shadow: 0 0 10px 0 rgb(33, 33, 33);
+}
+
+.button:hover {
+	background-color: var(--footer-color);
 }
 
 @media (max-width: 600px) {

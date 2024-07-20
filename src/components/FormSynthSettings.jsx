@@ -22,12 +22,13 @@ function FormSynthSettings({
 							name="name"
 							onChange={handleChange}
 							value={formData.name}
+                            maxLength="20"
 						/>
 					</div>
 				</div>
 				<div className="field">
 					<label className="label">Waveform</label>
-					<div className="select is-primary">
+					<div>
 						<select
 							type="select"
 							name="waveform"
@@ -153,7 +154,7 @@ function FormSynthSettings({
 					type="button"
 					onClick={handleIsNotes}
 				>
-					{isNotes ? "Notes active" : "Warp active"}
+					{isNotes ? "Warp Lock" : "Warp Unlock"}
 				</button>
 				{!isNotes ? (
 					<button

@@ -28,19 +28,24 @@ h2.synth-header {
 .slide-settings-container {
   display: flex;
   flex-wrap: wrap;
-  max-width: 1000px;
+  max-width: 90vw;
   border: 1px solid #cfcfcf16;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   overflow: hidden;
   padding: 5px;
-  margin: 20px;
+  margin: 20px auto;
   justify-self: center;
+  align-self: center;
   justify-content: center;
 }
 
 .synth-grid-container {
+
     grid-auto-rows: 50px;
+    max-width: 589px;
+    margin: 20px auto;
+    justify-content: center;
 }
 
 .freq-grid-item {
@@ -48,7 +53,7 @@ h2.synth-header {
     justify-content: center;
     align-items: center;
     background-color: #333333;
-    color: rgb(198, 118, 255);
+    color: var(--nav-buttons-color);
     font-size: 1rem;
     flex: 1 1 70px;
     height: 50px;
@@ -59,7 +64,7 @@ h2.synth-header {
 }
 
 .freq-grid-item:hover {
-    background-color: rgba(132, 0, 255, 0.361);
+    background-color: var(--navbar-color);
     color:rgb(234, 206, 255)
 }
 
@@ -104,7 +109,7 @@ h2.synth-header {
   height: 40px;
   background: rgba(132, 0, 255, 0.361);
   border-radius: 10px;
-  box-shadow: -350px 0px 0px 350px rgb(115, 22, 201);
+  box-shadow: -350px 0px 0px 350px var(--subheader-color);
   cursor: pointer;
 }
 

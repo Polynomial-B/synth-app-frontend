@@ -12,7 +12,7 @@ import warpFrequencies from "../assets/warpFrequencies.js";
 
 function Synth() {
 	const navigate = useNavigate();
-	
+
 	const [gridSize, setGridSize] = useState(8);
 	const [isNotes, setIsNotes] = useState(true);
 	const [divisions, setDivisions] = useState(12)
@@ -46,7 +46,9 @@ function Synth() {
 		(_, index) => index + 1
 	);
 
-	// ! Note: be careful when manipulating the 'volume' parameter below:
+	// ! Be careful when manipulating the 'volume' parameter below:
+	// ! Make increments slowly and test often, to avoid potential damage to hearing and audio output devices:
+
 	const volume = formData.waveform !== "sine" ? -24 : -12;
 
 	const limiter = new Tone.Limiter(-64).toDestination();
@@ -173,7 +175,8 @@ function Synth() {
 			if (e.target.value === "+") {
 				equalTemperament += 1
 				setDivisions(equalTemperament)
-			} else if (e.target.value === "-") {
+			} else if ((e.target.value === "-") && (divisions > 5)) {
+				
 				equalTemperament -= 1
 				setDivisions(equalTemperament)
 			}
@@ -182,15 +185,12 @@ function Synth() {
 				temperament = (2 ** (1/equalTemperament))
 			}
 			calculateEqualTemperament()
-			console.log('temp ,', temperament)
 
 
 			let newArray = [11000];
 			for (let i = 0; i < 32; i++) {
 				newArray.push(Math.round(newArray[i] * temperament));
-				console.log(newArray)
 			}
-			console.log("newArray ", newArray);
 			setWarpFreqs(newArray)
 			const newFormData = structuredClone(formData)
 			newFormData.freqs = newArray
@@ -202,7 +202,6 @@ function Synth() {
 	return (
 		<>
 			<h2 className="synth-header">{formData.name}</h2>
-			{/* <div className="grid-container settings-grid-container"> */}
 
 			<FormSynthSettings 
 			handleChange={handleChange}
@@ -214,7 +213,6 @@ function Synth() {
 			oscillatorTypes={oscillatorTypes}
 			divisions={divisions}
 			/>
-			{/* </div> */}
 			<div className="grid-container synth-grid-container">
 				{gridArray.map((index) => (
 					<div
