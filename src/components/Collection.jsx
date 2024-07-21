@@ -8,8 +8,8 @@ import Loading from "./Loading";
 
 function Collection() {
 	const [collection, setCollection] = useState([]);
-	const [isCollection, setIsCollection] = useState(null)
-
+	const [isCollection, setIsCollection] = useState(null);
+	
 	useEffect(() => {
 		document.title = "Collection";
 	}, []);
@@ -17,36 +17,36 @@ function Collection() {
 	useEffect(() => {
 		async function fetchCollection() {
 			try {
-				let updateIsCollection
+				let updateIsCollection;
 				const token = localStorage.getItem("token");
 				const response = await axios.get(`${baseUrl}/synths/`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				setCollection(response.data);
-				if(collection.length !== 0) {
-					updateIsCollection = true
-					setIsCollection(updateIsCollection)
-				} else {
-					updateIsCollection = false
-					setIsCollection(updateIsCollection)
-				}
+				updateIsCollection = true;
+				setIsCollection(updateIsCollection);
+
 			} catch (error) {
-				toast.error("Error finding collection");
-				setIsCollection(false)
+				toast.error("Could not find collection");
+				setIsCollection(false);
 			}
 		}
 		fetchCollection();
 	}, []);
-	
+
 	return (
 		<>
-			<Suspense fallback={<Loading/>}>{!isCollection ? (
-				<h2 className="">
-					Your collection is currently empty.
-					<br />
-					<Link to="/synth">Click here</Link> to customise a synthesiser.
-				</h2>
-			) : <h2>Below are your custom synths:</h2>}
+			<Suspense fallback={<Loading />}>
+				{isCollection === null ? null : isCollection ? (
+					<h2>Below are your custom synths:</h2>
+				) : (
+					<h2 className="">
+						Your collection is currently empty.
+						<br />
+						<Link to="/synth">Click here</Link> to customise a
+						synthesiser.
+					</h2>
+				)}
 			</Suspense>
 			<div className="section">
 				<div className="columns is-multiline is-mobile">
@@ -63,7 +63,10 @@ function Collection() {
 												<div className="container">
 													{collection.name}
 												</div>
-												<img src="https://wallpapers.com/images/hd/purple-aesthetic-keyboard-cat-yws9dijlf2gl62r5.jpg" alt={collection.name}/>
+												<img
+													src="https://wallpapers.com/images/hd/purple-aesthetic-keyboard-cat-yws9dijlf2gl62r5.jpg"
+													alt={collection.name}
+												/>
 											</div>
 										</div>
 									</Link>
@@ -73,7 +76,6 @@ function Collection() {
 					})}
 				</div>
 			</div>
-			
 		</>
 	);
 }
