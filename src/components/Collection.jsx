@@ -9,8 +9,6 @@ import Loading from "./Loading";
 function Collection() {
 	const [collection, setCollection] = useState([]);
 	const [isCollection, setIsCollection] = useState(null)
-	console.log(isCollection)
-	console.log(collection.length)
 
 	useEffect(() => {
 		document.title = "Collection";
@@ -19,17 +17,19 @@ function Collection() {
 	useEffect(() => {
 		async function fetchCollection() {
 			try {
+				let updateIsCollection
 				const token = localStorage.getItem("token");
 				const response = await axios.get(`${baseUrl}/synths/`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				setCollection(response.data);
-				if(collection.length === 0) {
-					setIsCollection(false)
+				if(collection.length !== 0) {
+					updateIsCollection = true
+					setIsCollection(updateIsCollection)
 				} else {
-					setIsCollection(true)
+					updateIsCollection = false
+					setIsCollection(updateIsCollection)
 				}
-
 			} catch (error) {
 				toast.error("Error finding collection");
 				setIsCollection(false)
@@ -37,15 +37,14 @@ function Collection() {
 		}
 		fetchCollection();
 	}, []);
-
+	
 	return (
 		<>
-			<Suspense fallback={<Loading/>}>{isCollection ? (
-				<h2 className="collection-header">
+			<Suspense fallback={<Loading/>}>{!isCollection ? (
+				<h2 className="">
 					Your collection is currently empty.
 					<br />
-					<Link to="/synth">Design one here</Link> to add to your
-					collection.
+					<Link to="/synth">Click here</Link> to customise a synthesiser.
 				</h2>
 			) : <h2>Below are your custom synths:</h2>}
 			</Suspense>
