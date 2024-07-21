@@ -41,19 +41,33 @@ html {
 	margin: 0 auto;
 }
 
-h2 {
+h2, h3 {
 	color: var(--subheader-color);
-	font-size: 1.5rem;
 	line-height: normal;
-	margin: 1em 0;
 	text-align: center;
+	margin: 1em 0 0;
 }
 
-p, h2 {
+p, h2, h3 {
 	padding: 0 2rem;
 }
 p {
 	text-align: justify;
+}
+
+.disclaimer {
+	margin: 1em 3em 0;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h3 {
+	font-size: 1.2em;
+	margin: 0 auto;
+	padding: 0 0 1em;
+	max-width: 500px;
 }
 
 h5 {
@@ -149,6 +163,10 @@ footer {
 	flex-direction: column;
 	width: 8rem;
 	margin: 0;
+}
+
+.footer-contact-body a {
+	color: var(--background-color);
 }
 
 .button {
