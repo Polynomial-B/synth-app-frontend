@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 
+function Home() {
 
-
-const Home = () => {
-
+  useEffect(()=> {
+    document.title = "SynthSounds"
+  }, [])
 
   return (
     <>
