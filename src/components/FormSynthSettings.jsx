@@ -22,7 +22,7 @@ function FormSynthSettings({
 							name="name"
 							onChange={handleChange}
 							value={formData.name}
-                            maxLength="20"
+                            maxLength="30"
 						/>
 					</div>
 				</div>
@@ -49,8 +49,8 @@ function FormSynthSettings({
 							<input
 								className="control-form-input"
 								type="range"
-								min="10"
-								max="5000"
+								min="1"
+								max="1000"
 								name="attack"
 								onChange={(e) => handleChange(e, 0)}
 								value={formData.a_d_s_r[0]}

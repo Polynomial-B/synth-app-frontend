@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Synth.css";
@@ -6,7 +6,7 @@ import * as Tone from "tone";
 import { toast } from "react-toastify";
 import { baseUrl } from "../config";
 import FormSynthSettings from "./FormSynthSettings";
-
+import Loading from "./Loading";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
 import warpFrequencies from "../assets/warpFrequencies.js";
 
@@ -19,7 +19,7 @@ function Synth() {
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
-		waveform: "sine",
+		waveform: "sawtooth",
 		effects: [
 			{ distortion: 1 },
 			{ chorus: [4, 0, 0.0] },
@@ -51,7 +51,7 @@ function Synth() {
 
 	const volume = formData.waveform !== "sine" ? -24 : -12;
 
-	const limiter = new Tone.Limiter(-64).toDestination();
+	const limiter = new Tone.Limiter(-32).toDestination();
 	const distortion = new Tone.Distortion(
 		formData.effects[0].distortion / 1000,
 		"2x"
@@ -73,7 +73,7 @@ function Synth() {
 			type: formData.waveform,
 		},
 		envelope: {
-			attack: formData.a_d_s_r[0] / 1000,
+			attack: formData.a_d_s_r[0]/100,
 			decay: formData.a_d_s_r[1] / 1000,
 			sustain: formData.a_d_s_r[2] / 1000,
 			release: formData.a_d_s_r[3] / 1000,
@@ -202,7 +202,7 @@ function Synth() {
 	return (
 		<>
 			<h2 className="synth-header">{formData.name}</h2>
-
+			<Suspense fallback={<Loading/>}>
 			<FormSynthSettings 
 			handleChange={handleChange}
 			handleSubmit={handleSubmit}
@@ -230,6 +230,7 @@ function Synth() {
 					</div>
 				))}
 			</div>
+			</Suspense>
 		</>
 	);
 }

@@ -6,7 +6,7 @@ import "../App.css";
 import * as Tone from "tone";
 import { toast } from "react-toastify";
 import { baseUrl } from "../config";
-
+import Loading from "./Loading";
 import oscillatorTypes from "../assets/oscillatorTypes.js";
 import warpFrequencies from "../assets/warpFrequencies.js";
 import FormSynthSettings from "./FormSynthSettings";
@@ -233,7 +233,7 @@ function Tinker() {
 		<>
 			<h2 className="synth-header">{formData.name}</h2>
 			{/* <div className="grid-container settings-grid-container"> */}
-
+			<Suspense fallback={<Loading />}>
 			<FormSynthSettings 
 			handleChange={handleChange}
 			handleSubmit={handleSubmit}
@@ -265,6 +265,7 @@ function Tinker() {
 					</div>
 				))}
 			</div>
+			</Suspense>
 		</>
 	);
 }
