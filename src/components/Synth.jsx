@@ -91,7 +91,6 @@ function Synth() {
 	});
 
 	async function handleClick(e) {
-		console.log(e.target.innerText);
 		let noteToPlay = e.target.innerText;
 		if (noteToPlay === "") {
 			return;
@@ -140,8 +139,7 @@ function Synth() {
 		} else if (name === "waveform") {
 			newFormData.waveform = value;
 		} else if (name === "distortion") {
-			newFormData.effects[0].distortion = parseInt(value, 10);
-			console.log("Distortion change", newFormData.effects[0].distortion);
+			newFormData.effects[0].distortion = value;
 		} else if (name === "chorus") {
 			newFormData.effects[1].chorus = value;
 		} else if (name === "delay") {
@@ -162,7 +160,6 @@ function Synth() {
 			toast.success("Synth added to your collection!");
 			navigate("/collection");
 		} catch (err) {
-			console.log(err);
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}

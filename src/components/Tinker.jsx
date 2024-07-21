@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/Synth.css";
@@ -61,7 +61,7 @@ function Tinker() {
 	// ! Note: be careful when manipulating the 'volume' parameter below:
 	const volume = formData.waveform !== "sine" ? -24 : -12;
 
-	const limiter = new Tone.Limiter(-64).toDestination();
+	const limiter = new Tone.Limiter(-32).toDestination();
 	const distortion = new Tone.Distortion(
 		formData.effects[0].distortion / 1000,
 		"2x"
@@ -83,7 +83,7 @@ function Tinker() {
 			type: formData.waveform,
 		},
 		envelope: {
-			attack: formData.a_d_s_r[0] / 1000,
+			attack: formData.a_d_s_r[0] / 100,
 			decay: formData.a_d_s_r[1] / 1000,
 			sustain: formData.a_d_s_r[2] / 1000,
 			release: formData.a_d_s_r[3] / 1000,
@@ -101,7 +101,7 @@ function Tinker() {
 	});
 
 	async function handleClick(e) {
-		console.log(e.target.innerText);
+
 		let noteToPlay = e.target.innerText;
 		if (noteToPlay === "") {
 			return;
@@ -128,11 +128,10 @@ function Tinker() {
 			setIsNotes(false);
 			newFormData.freqs = warpFrequencies;
 			setFormData(newFormData);
-			console.log('false ', newFormData.freqs);
+			
 		} else {
 			setIsNotes(true);
-			newFormData.freqs = notes;
-			console.log('true ', newFormData.freqs);
+			newFormData.freqs = warpFrequencies;
             setFormData(newFormData);
 		}
 	}
@@ -152,8 +151,7 @@ function Tinker() {
 		} else if (name === "waveform") {
 			newFormData.waveform = value;
 		} else if (name === "distortion") {
-			newFormData.effects[0].distortion = parseInt(value, 10);
-			console.log("Distortion", newFormData.effects[0].distortion);
+			newFormData.effects[0].distortion = value;
 		} else if (name === "chorus") {
 			newFormData.effects[1].chorus = value;
 		} else if (name === "delay") {
@@ -177,7 +175,6 @@ function Tinker() {
 			);
 			toast.success("Settings saved!");
 		} catch (err) {
-			console.log(err.response.data);
 			toast.error("Sorry, we have encountered an error!");
 		}
 	}
@@ -212,15 +209,12 @@ function Tinker() {
 				temperament = (2 ** (1/equalTemperament))
 			}
 			calculateEqualTemperament()
-			console.log('temp ,', temperament)
 
 
 			let newArray = [11000];
 			for (let i = 0; i < 32; i++) {
 				newArray.push(Math.round(newArray[i] * temperament));
-				console.log(newArray)
 			}
-			console.log("newArray ", newArray);
 			setWarpFreqs(newArray)
 			const newFormData = structuredClone(formData)
 			newFormData.freqs = newArray
