@@ -33,6 +33,7 @@ function FormSynthSettings({
 							type="select"
 							name="waveform"
 							onChange={(e) => handleChange(e)}
+							value={formData.waveform}
 						>
 							{oscillatorTypes.map((type, index) => (
 								<option key={index} value={type}>
