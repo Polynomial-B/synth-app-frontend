@@ -31,7 +31,7 @@ html {
 .home-header {
 	background-color: var(--background-color);
 	color: var(--header-color);
-	font-size: clamp(5rem, 10vw, 6rem);
+	font-size: clamp(4rem, 10vw, 6rem);
 	font-variant: small-caps slashed-zero;
 	position: sticky;
 	position: -webkit-sticky;
