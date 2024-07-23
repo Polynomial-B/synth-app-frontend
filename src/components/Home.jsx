@@ -11,8 +11,6 @@ function Home() {
 			<h2 className="disclaimer">
 				Before you begin please be aware that manipulating sounds can
 				produce unpredictable results.
-				<br />
-				<br />
 			</h2>
       <h3>
 				Make sure that your speakers or headphones are initially set to a low

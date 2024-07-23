@@ -156,16 +156,3 @@ h2.synth-header {
     border-radius: 10px;
     overflow: none;
 }
-
-/* .slider:hover {
-    opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 50px;
-    background-color: purple;
-    cursor: pointer;
-} */
