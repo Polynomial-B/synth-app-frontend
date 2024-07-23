@@ -195,6 +195,9 @@ footer {
 	h1 {
 		padding: 2px;
 	}
+	.disclaimer, h3 {
+		margin: 0 30px;
+	}
 }
 
 @media (prefers-color-scheme: light) {
