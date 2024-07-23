@@ -52,8 +52,8 @@ h2.synth-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #333333;
-    color: var(--nav-buttons-color);
+    background-color: var(--footer-color);
+    color: var(--header-color);
     font-size: 1rem;
     flex: 1 1 70px;
     height: 50px;
@@ -65,12 +65,11 @@ h2.synth-header {
 
 .freq-grid-item:hover {
     background-color: var(--navbar-color);
-    color:rgb(234, 206, 255)
+    color:var(--subheader-color)
 }
 
 .freq-grid-item:active {
     transform: scale(0.9);
-    box-shadow: #ffffff;
 }
 
 .name-field {
@@ -78,6 +77,9 @@ h2.synth-header {
     max-width: 400px;
 }
 
+.name-field input {
+  background-color: var(--navbar-color);
+}
 
 .settings-grid-container.field {
   height: 220px;
@@ -88,8 +90,6 @@ h2.synth-header {
   justify-content: space-around;
   padding: 30px;
 }
-
-
 
 .form-element input[type="range"],
 .control-form-input {

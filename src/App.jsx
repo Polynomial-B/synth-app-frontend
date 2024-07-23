@@ -14,7 +14,10 @@ function App() {
 
   <Router>
   <ToastContainer
-  autoClose={1300}/>
+  autoClose={1300}
+  draggablePercent={40}
+  hideProgressBar="true"
+  stacked/>
     <Navbar />
     <Routes>
       <Route path="/" element={<Home />} />
