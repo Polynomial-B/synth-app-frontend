@@ -1,6 +1,6 @@
-h2.collection-header {
+.collection-header {
 	background-color: var(--background-color);
-	color: var(--header-color);
+	color: var(--text-color);
 	font-size: clamp(2rem, 5vw, 4rem);
 	font-variant: small-caps slashed-zero;
 	position: sticky;
@@ -11,3 +11,19 @@ h2.collection-header {
 	margin: 0 auto;
 }
 
+.container {
+	color: var(--text-color);
+	flex: 0 0 200px;
+}
+
+.collection-name {
+	border: 1px solid #cfcfcf16;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	background-color: var(--footer-color);
+}
+
+.collection-name img {
+	opacity: 0.6;
+	height: 120px;
+	border-radius: 10px;
+}

@@ -38,9 +38,9 @@ function Collection() {
 		<>
 			<Suspense fallback={<Loading />}>
 				{isCollection === null ? null : isCollection ? (
-					<h2>Below are your custom synths:</h2>
+					<h2 className="collection-header">Below are your custom synths:</h2>
 				) : (
-					<h2 className="">
+					<h2 className="collection-header">
 						Your collection is currently empty.
 						<br />
 						<Link to="/synth">Click here</Link> to customise a
@@ -64,7 +64,7 @@ function Collection() {
 													{collection.name}
 												</div>
 												<img
-													src="https://wallpapers.com/images/hd/purple-aesthetic-keyboard-cat-yws9dijlf2gl62r5.jpg"
+													src="src/assets/images/html-icon.png"
 													alt={collection.name}
 												/>
 											</div>
