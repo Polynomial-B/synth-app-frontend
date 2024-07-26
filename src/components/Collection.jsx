@@ -64,7 +64,7 @@ function Collection() {
 													{collection.name}
 												</div>
 												<img
-													src="../src/assets/images/html-icon.png"
+													src="./src/assets/images/html-icon.png"
 													alt={collection.name}
 												/>
 											</div>
