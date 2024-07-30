@@ -9,7 +9,7 @@ import Loading from "./Loading";
 function Collection() {
 	const [collection, setCollection] = useState([]);
 	const [isCollection, setIsCollection] = useState(null);
-	
+
 	useEffect(() => {
 		document.title = "Collection";
 	}, []);
@@ -25,7 +25,6 @@ function Collection() {
 				setCollection(response.data);
 				updateIsCollection = true;
 				setIsCollection(updateIsCollection);
-
 			} catch (error) {
 				toast.error("Could not find collection");
 				setIsCollection(false);
@@ -38,7 +37,9 @@ function Collection() {
 		<>
 			<Suspense fallback={<Loading />}>
 				{isCollection === null ? null : isCollection ? (
-					<h2 className="collection-header">Below are your custom synths:</h2>
+					<h2 className="collection-header">
+						Below are your custom synths:
+					</h2>
 				) : (
 					<h2 className="collection-header">
 						Your collection is currently empty.
