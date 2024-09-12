@@ -200,7 +200,7 @@ function Tinker() {
 			if (e.target.value === "+") {
 				equalTemperament += 1
 				setDivisions(equalTemperament)
-			} else if (e.target.value === "-") {
+			} else if (e.target.value === "-" && divisions > 5) {
 				equalTemperament -= 1
 				setDivisions(equalTemperament)
 			}
