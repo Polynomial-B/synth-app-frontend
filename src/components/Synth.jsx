@@ -15,7 +15,7 @@ function Synth() {
 
 	const [gridSize, setGridSize] = useState(8);
 	const [isNotes, setIsNotes] = useState(true);
-	const [divisions, setDivisions] = useState(12)
+	const [divisions, setDivisions] = useState(12);
 	const [formData, setFormData] = useState({
 		name: `My Synth`,
 		a_d_s_r: [100, 200, 999, 300],
@@ -29,13 +29,6 @@ function Synth() {
 	});
 
 	const [warpFreqs, setWarpFreqs] = useState(warpFrequencies);
-
-	// console.log(formData);
-	// console.log("distortion", formData.effects[0].distortion);
-	// console.log("susta", formData.a_d_s_r[2] / 1000);
-	// console.log("chorus", formData.effects[1].chorus);
-	// console.log("feedback", formData.effects[2].feedback);
-	// console.log("feedback", formData.effects[2].feedback[0]);
 
 	useEffect(() => {
 		document.title = "Create Synth";
@@ -73,7 +66,7 @@ function Synth() {
 			type: formData.waveform,
 		},
 		envelope: {
-			attack: formData.a_d_s_r[0]/100,
+			attack: formData.a_d_s_r[0] / 100,
 			decay: formData.a_d_s_r[1] / 1000,
 			sustain: formData.a_d_s_r[2] / 1000,
 			release: formData.a_d_s_r[3] / 1000,
@@ -166,67 +159,64 @@ function Synth() {
 
 	function handleWarp(e) {
 		function updateFreqArray() {
+			let equalTemperament = divisions;
 
-			let equalTemperament = divisions
-			
 			if (e.target.value === "+") {
-				equalTemperament += 1
-				setDivisions(equalTemperament)
-			} else if ((e.target.value === "-") && (divisions > 5)) {
-				
-				equalTemperament -= 1
-				setDivisions(equalTemperament)
+				equalTemperament += 1;
+				setDivisions(equalTemperament);
+			} else if (e.target.value === "-" && divisions > 5) {
+				equalTemperament -= 1;
+				setDivisions(equalTemperament);
 			}
-			let temperament
+			let temperament;
 			function calculateEqualTemperament() {
-				temperament = (2 ** (1/equalTemperament))
+				temperament = 2 ** (1 / equalTemperament);
 			}
-			calculateEqualTemperament()
-
+			calculateEqualTemperament();
 
 			let newArray = [11000];
 			for (let i = 0; i < 32; i++) {
 				newArray.push(Math.round(newArray[i] * temperament));
 			}
-			setWarpFreqs(newArray)
-			const newFormData = structuredClone(formData)
-			newFormData.freqs = newArray
-			setFormData(newFormData)
+			setWarpFreqs(newArray);
+			const newFormData = structuredClone(formData);
+			newFormData.freqs = newArray;
+			setFormData(newFormData);
 		}
-		updateFreqArray()
+		updateFreqArray();
 	}
 
 	return (
 		<>
 			<h2 className="synth-header">{formData.name}</h2>
-			<Suspense fallback={<Loading/>}>
-			<FormSynthSettings 
-			handleChange={handleChange}
-			handleSubmit={handleSubmit}
-			handleIsNotes={handleIsNotes}
-			isNotes={isNotes}
-			handleWarp={handleWarp}
-			formData={formData}
-			oscillatorTypes={oscillatorTypes}
-			divisions={divisions}
-			/>
-			<div className="grid-container synth-grid-container">
-				{gridArray.map((index) => (
-					<div
-						key={index}
-						name="freqs"
-						className="freq-grid-item"
-						onMouseDown={(e) => handleClick(e)}
-						onMouseUp={(e) => handleMouseOff(e)}
-						onMouseLeave={handleMouseOff}
-						onTouchStart={(e) => handleClick(e)}
-						onTouchEnd={handleMouseOff}
-						onChange={(e) => handleChange(e)}
-					>
-						{formData.freqs[index - 1] / 100}
-					</div>
-				))}
-			</div>
+			<Suspense fallback={<Loading />}>
+				<FormSynthSettings
+					handleChange={handleChange}
+					handleSubmit={handleSubmit}
+					handleIsNotes={handleIsNotes}
+					isNotes={isNotes}
+					handleWarp={handleWarp}
+					formData={formData}
+					oscillatorTypes={oscillatorTypes}
+					divisions={divisions}
+				/>
+				<div className="grid-container synth-grid-container">
+					{gridArray.map((index) => (
+						<div
+							key={index}
+							name="freqs"
+							className="freq-grid-item"
+							onMouseDown={(e) => handleClick(e)}
+							onMouseUp={(e) => handleMouseOff(e)}
+							onMouseLeave={handleMouseOff}
+							onTouchStart={(e) => handleClick(e)}
+							onTouchEnd={handleMouseOff}
+							onChange={(e) => handleChange(e)}
+						>
+							{formData.freqs[index - 1] / 100}
+						</div>
+					))}
+				</div>
 			</Suspense>
 		</>
 	);
