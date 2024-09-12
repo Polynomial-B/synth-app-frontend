@@ -3,16 +3,17 @@
 # General Assembly Project 4: Synth Sounds
 
 ## Brief
-
-  
-
+-
+- The app utilises Django templates for rendering templates to users.
+- PostgreSQL is used as the database management system.
+- The app uses Django’s built-in session-based authentication.
+- Authorisation is implemented in the app. Guest users (those not signed in) should not be able to create, update, or delete data in the application or access functionality allowing those actions.
+- The app has at least one data entity in addition to the User model. At least one entity must have a relationship with the User model.
+- The app has full CRUD functionality.
+- The app is deployed online so that the rest of the world can use it.
 ### Project Members:
 
-  
-
-* Matt Lamb: https://github.com/Polynomial-B
-
-  
+* Matt Lamb
 
 ### Timeframe:
 
@@ -20,31 +21,18 @@
 
 #### Goal:
 
-Create a full-stack React application using Django and PostgreSQL:
-
-- The app utilises Django templates for rendering templates to users.
-
-- PostgreSQL is used as the database management system.
-
-- The app uses Django’s built-in session-based authentication.
-
-- Authorisation is implemented in the app. Guest users (those not signed in) should not be able to create, update, or delete data in the application or access functionality allowing those actions.
-
-- The app has at least one data entity in addition to the User model. At least one entity must have a relationship with the User model.
-
-- The app has full CRUD functionality.
-
-- The app is deployed online so that the rest of the world can use it.
-
-  
+Create a full-stack CRUD React application with Django and PostgreSQL, using Django’s built-in session-based authentication. The app will have one data entity in addition to the User model and contain a one-to-many or many-to-many relationship with the User model.
 
 # SynthSounds
 
   
+SynthSounds is an experimental synthesiser that allows micro-tuning [(click to navigate to 'Warp' section for further explanation)](#Warp).
 
-An experimental synthesiser that allows micro-tuning [(click to navigate to 'Warp' section for further explanation)](#Warp).
+### Concept
 
-  
+For my final project I wanted to try something that wasn't just a CRUD app. I thought about how I could incorporate my musical interest into this and came up with two ideas, a...... .eventually settling on the synthesiser.
+
+I wanted SynthSounds to be a customisable music synthesiser that abstracted away musical notations to allow experimentation based on the sounds rather than their placement in keys and scales. So instead of having the more familiar black and white piano notes, everything is expressed in a grid with numbers (the musical frequencies in Hertz). The lower the number, the lower the pitch.
 
 ### Deployed version:
 
@@ -56,69 +44,45 @@ An experimental synthesiser that allows micro-tuning [(click to navigate to 'War
 
 ## Technologies and Dependencies
 
-  
-
-###### Front-End
+#### Front-End
 
 - JavaScript
-
 - React
-
 - Tone.js
-
 - HTML
-
 - CSS
-
 - Axios
-
 - React-dom
-
 - React-router-dom
-
 - React-toastify
+- Bulma
 
-  
-
-###### Back-End ([GitHub Link](https://github.com/Polynomial-B/synth-app-backend))
+#### Back-End ([GitHub Link](https://github.com/Polynomial-B/synth-app-backend))
 
 - Python
-
 - PostgreSQL
-
 - Django
-
 - Psycopg2
-
 - Djangorestframework
-
 - Python-dotenv
-
 - JWT
-
 - Django-cors-headers
-
 - Django-on-heroku
 
-  
 
 ## Planning & Build
 
-  
-
-### Concept
-
-  
-
-I wanted SynthSounds to be a customisable music synthesiser that abstracted away musical notations to allow experimentation based on the sounds rather than their placement in keys and scales. So instead of having the more familiar black and white piano notes, everything is expressed in a grid with numbers (the musical frequencies in Hertz). The lower the number, the lower the pitch.
-
-  
-
 ### Planning
 
-  
+##### Discarded Atonal Matrix
 
-I started with [tests](#Appendix) in Python to create grids and calculate
+My initial idea was to create a  matrix generator for [atonal](https://en.wikipedia.org/wiki/Atonality) music whereby the user would choose _all_ the notes in the 'Western' musical [scale](https://en.wikipedia.org/wiki/Chromatic_scale) and the generator would calculate the outputs as determined in atonal music ([prime, retrograde, inversion, retrograde inversion](https://musictheory.pugetsound.edu/mt21c/TwelveToneTechnique.html)). The user would then be able to play back these notes in order to create an Atonal piece of music.
+
+After successful python testing, I decided to discard this idea because I thought the inaccessibility of the genre and presumption of music theory would make this difficult to 'pick up and play' for someone who hadn't come across the idea before. I also found that the idea was quite restrictive and I instead wanted something more free and experimental. On top of this, atonal matrix calculators already exist online.
+
+##### Experimental Synth
+
+I started with [tests](#Appendix) in Python to create grids and calculate...
 
 If you want some reference to a musical keyboard:
 
@@ -173,8 +137,6 @@ In the above example, we can see that we could replicate this on a normal keyboa
 
 ### Build
 
-  
-
 #### Constructing the Synth
 
 Using the Tone.js library, I was able to able to build a basic synth using JavaScript classes in the following structure:
@@ -214,9 +176,9 @@ function handleMouseOff() {
 
 After testing I had to add `onMouseLeave` to `handleMouseOff` because a bug occurred where if you press and held a note and then left the grid area, then the note would play continuously.
 
-#### Mapping Frequencies to the Grid
+%% #### Mapping Frequencies to the Grid
 
-
+.... %%
 
 #### Warp Calculation
 
@@ -326,45 +288,31 @@ calculateEqualTemperament()
 
 ## Accreditations
 
-  
-
-None.
-
-  
-  
+The placeholder text on the home page, underneath the volume warning, comes from Wikipedia.
 
 ## Bugs, Wins & Challenges
 
+### Wins
+##### Warp
+
+==I was most happy with the 'Warp' feature, that I mostly built on my phone's 'Notes' app while on a bus. I managed to work out the ==
+
+
+### Bugs
 
 Warp under 5: Perhaps a better way to do this would have been to add logic that prevents the `for` loop from pushing numbers in that are above a certain frequency and still allow users to choose divisions of less than 5.
 
 
-This project was a challenging endeavour as I built the app using libraries and features that I hadn't used before and, within the timeframe, I was unable to fully test edgecases. I would approach this project differently if I had more time. For example, this was my first time using onTouchEnd and onTouchStart ...
-
-  
+This project was a challenging endeavour as I built the app using libraries and features that I hadn't used before and, within the timeframe, I was unable to fully test edge cases. I would approach this project differently if I had more time.
   
 
-# ==Warp Lock - 8 - freq 142.66 needs fixing. Currently BROKEN==
-
-  
-  
-  
-
-Not a bug, but with
-
-`html { background-color: ... }`
-
-I was unable to apply the root variable and instead had to manually apply the colour. This is something that I haven't looked too much into, for time's sake but may have ==something to do with the root / .jsx being WEIRD together==
-
-  
-
-Bulma Issues
+##### Bulma Conflict Issues
 
 Issues with Bulma and the select box, conflicting the z-index of the header. In the end i removed the bulma class `select` and opted to manually style it myself
 
   
 
-Warp in Collection
+##### Warp in Collection
 
 Navigating from Collection to a saved synth (Tinker) The Warp useState is set to '12' which doesn't account for if the number of divisions has been changed by the user. If you were to create a Synth that had 5 divisions per octave, you can save it to your collection and it will play correctly, but the divisions amount will say that is it '12' and if you click 'Warp' then it will revert the divisions back to '12'. This would be an easy fix, through updating the useState to the data received from the backend in the useEffect hook. This could be done by updating the useEffect state upon.
 
@@ -376,29 +324,73 @@ On mobile devices the onTouchEnd
 
   
 
-## Future Features & Key Learnings
+## Key Learnings, Improvements & Future Features
 
-  
+### Key Learnings
 
-#### Future Improvements
+Tone.js -- an unfamiliar library
+Experience with React, props, hooks
+### Improvements
 
-  
+##### Refactoring
 
-Allow non-authenticated users (guests) to be able to play the synth. This was a bit of an oversight, but could be easily fixed. The permissions to view synths has already been implemented in Django REST Framework and would only require some changes to the frontend.
+Due to time constraints I wasn't able to do as much as I wanted.
+
+``` JavaScript
+const formMappings = {
+	attack: 0,
+	decay: 1,
+	sustain: 2,
+	release: 3,
+};
+```
+
+``` JavaScript
+if (
+	name.includes("attack") ||
+	name.includes("decay") ||
+	name.includes("sustain") ||
+	name.includes("release")
+) {
+	newFormData.a_d_s_r[formMappings[name]] = value;
+```
+
+This could use further refactoring by using a `for` loop to iterate over each key pair and removing the need for the OR operators.
+
+The same principal should also be applied to the effects, within the same `handleChange` function.
+
+##### Synth Access for Guests
+
+Guests should be able to use the synth without having to sign in (or using the URL). This is not a permissions problem, as can be seen in the the Django REST Framework  `views.py`:
+
+``` Python
+class SynthListView(APIView):
+	permission_classes = (IsAuthenticatedOrReadOnly, )
+```
+
+The fix would require removing the `isLoggedIn` along with the `&&` short-circuiting (below), then some conditional rendering to remove the 'Save Synth' button.
+
+``` JavaScript
+{isLoggedIn && (
+	<Link to="/synth" className="button" draggable="false">
+	Create Synth
+	</Link>
+)}
+```
+
+### Future Features
+
+The Sequencer - which already has the schema/backend made.
+
+
 
   
 
 For further usability:
-
 * piano
-
 * pad
-
 * marimba
-
 * xylophone
-
-  
 
 Ability to toggle on/off the effects
 
@@ -420,9 +412,9 @@ Keyboard mapping
 
   
 
-The Sequencer - which already has the schema/backend made.
 
-  
+
+
   
   
 
@@ -436,7 +428,6 @@ The Sequencer - which already has the schema/backend made.
 
 The initial idea was to create a 12-Tone matrix generator for [atonal](https://en.wikipedia.org/wiki/Atonality) music whereby the user must choose _all_ the notes in the 'Western' musical [scale](https://en.wikipedia.org/wiki/Chromatic_scale) and the generator would calculate the outputs ([prime, retrograde, inversion, retrograde inversion](https://musictheory.pugetsound.edu/mt21c/TwelveToneTechnique.html)). The user would then be able to play back these notes in order to create an Atonal piece of music.
 
-  
 
 I discarded this idea because the required user learning to understand the concept would have made the user experience quite low.
 
