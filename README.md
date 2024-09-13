@@ -3,7 +3,7 @@
 # General Assembly Project 4: Synth Sounds
 
 ## Brief
--
+
 - The app utilises Django templates for rendering templates to users.
 - PostgreSQL is used as the database management system.
 - The app uses Django’s built-in session-based authentication.
@@ -72,41 +72,24 @@ I wanted SynthSounds to be a customisable music synthesiser that abstracted away
 
 ## Planning & Build
 
-### Planning
+### Planning (Day 1)
 
-##### Discarded Atonal Matrix
+#### Discarded Atonal Matrix
 
 My initial idea was to create a  matrix generator for [atonal](https://en.wikipedia.org/wiki/Atonality) music whereby the user would choose _all_ the notes in the 'Western' musical [scale](https://en.wikipedia.org/wiki/Chromatic_scale) and the generator would calculate the outputs as determined in atonal music ([prime, retrograde, inversion, retrograde inversion](https://musictheory.pugetsound.edu/mt21c/TwelveToneTechnique.html)). The user would then be able to play back these notes in order to create an Atonal piece of music.
 
-After successful python testing, I decided to discard this idea because I thought the inaccessibility of the genre and presumption of music theory would make this difficult to 'pick up and play' for someone who hadn't come across the idea before. I also found that the idea was quite restrictive and I instead wanted something more free and experimental. On top of this, atonal matrix calculators already exist online.
+However, after successful python testing I decided to abandon the idea because I felt the genre's inaccessibility and the need for prior music theory knowledge would make it difficult to 'pick up and play'.
 
-##### Experimental Synth
+#### Experimental Synth
 
-I started with [tests](#Appendix) in Python to create grids and calculate...
+I wanted to create a synthesiser that maintained familiarity with everyday sounds, so that it wasn't too inaccessible. I came up with the idea to be able to increase and decrease the amount of notes available inside each musical octave.
 
-If you want some reference to a musical keyboard:
+##### Warp
+
+*Warp* allows you to change the amount of notes in each octave. Each octave usually contains `12` notes (see 'Standard Keyboard' image) but with _warp_ you can change the number of divisions to discover different scales that are not usually seen inside of 'Western' music.
 
 
-The musical note 'A' (or 'La' in solfège) is 110Hz, 220Hz, 440Hz, etc.
-
-
-You may have noticed that the frequency of a note in any given octave is double that of the octave below it, which is something that I had to consider when programming the 'warp'. The logarithmic scaling required additional logic when programming the 'warp' feature.
-
-  
-
-#### Warp
-
-*Warp* allows you to change the amount of notes in each octave. Each octave usually contains `12` notes but with _warp_ you can change the number of divisions to discover different scales that are not usually seen inside of 'Western' music.
-
-  
-
-##### Ditching the Piano Keyboard
-
-  
-
-When I talk about 12-Tone, I am referring to the amount of notes in an octave. For example, if you see the keyboard image below you will see that the notes go from 1 up to 12. This is how most instruments are tuned as it provides us with familiar sounding tones.
-
-  
+###### Standard Keyboard
 
 ![](./src/assets/readme/12-standard-keyboard.png)
 
@@ -114,30 +97,144 @@ When I talk about 12-Tone, I am referring to the amount of notes in an octave. F
 
 So abstracting away from the standard keyboard, we could imagine the keyboard instead of having two rows (black keys and white keys), just as having one row instead.
 
-  
 
 ![](./src/assets/readme/12-tone-keyboard.png)
 
-  
+###### Different Divisions
 
-Now imagine that instead of having 12 notes in each octave, that we have six. So you can't play from 1-12, but only from 1-6. But in both cases you end up in the same place. This is what I mean when I talk about the intervals. We are still working within the octaves but we're dividing differently.
+Below there are only six notes per octave instead of twelve. You end up in the same place after going up the keyboard in 6 steps (as opposed to 12).
 
-  
 
 ![](./src/assets/readme/6-tone-keyboard.png)
 
   
 
-In the above example, we can see that we could replicate this on a normal keyboard by just ignoring every other note (playing every even or odd note). But this is where the 'warp' feature becomes more interesting. Instead of having 6 notes in the octave, why not try having 5 or 15 or 17?
+In the above example, we can see that we could replicate this on a normal keyboard by just ignoring every other note (playing every even or odd note) because 6 divides evenly into 12. But this is where the 'warp' feature becomes more interesting. Instead of having 6 notes in the octave, why not try having 5 or 15 or 17?
 
-  
-  
-  
-  
+#### Divisions
+
+I started with tests in Python using `pyaudio` to calculate and output frequencies with linear divisions. However, I decided to opt instead for logarithmic divisions between the notes to maintain a familiarity with the sounds (as this is the standard in 'western music').
+
+##### Linear Divisions
+
+``` Python
+divisions = 12
+freq_low = 220 # A3
+freq_high = 440 # A4 
+
+def freq_calc(min, max, divisions):
+	divide_amount = max - min
+	calc_result = divide_amount / divisions
+	print(f'Division amount: {calc_result:.3f}')
+	return calc_result 
+
+calc_result = freq_calc(freq_low, freq_high, divisions)
+
+i = 0
+while i <= divisions
+	print(f'{freq_low:.3f}')
+	freq_low = freq_low + calc_result
+	i += 1 
+
+# Calculation Results:
+
+Division amount: 18.333
+220.000
+238.333
+256.667
+275.000
+293.333
+311.667
+330.000
+348.333
+366.667
+385.000
+403.333
+421.667
+440.000
+```
+
+##### Logarithmic Divisions (Equal Temperament)
+
+To calculate the divisions of the standard western scale, I used the ratio equal to the 12th root of 2:
+
+$\sqrt[12]{2}​$ ≈ 1.05946
+
+In the frontend, I did it as follows:
+
+$2^{1/12}$ ≈ 1.05946
+
+This can be changed dynamically through use of the function depending on what divisions the user requests:
+
+
+``` JavaScript
+function calculateEqualTemperament() {
+	temperament = (2 ** (1/equalTemperament));
+}
+```
 
 ### Build
 
-#### Constructing the Synth
+#### Backend (Day 2 - 3)
+
+I built the backend using Django REST Framework to create a RESTful API that utilised PostgreSQL as a database (to be deployed through Heroku) and authentication using JSON Web Tokens. I included three models, two of which were for immediate use, `jwt_auth` and `synth` and the third, `sequencer` for future application.
+
+###### `synths/views.py`
+
+``` Python
+class SynthListView(APIView):
+	permission_classes = (IsAuthenticatedOrReadOnly, )
+	
+	def get(self, request):
+		synths = Synth.objects.filter(owner=request.user.id)
+		serialized_synths = SynthSerializer(synths, many=True)
+		return Response(serialized_synths.data, status=status.HTTP_200_OK)
+	
+	def post(self, request):
+		request.data["owner"] = request.user.id
+		
+		synth_to_add = SynthSerializer(data=request.data)
+		
+		try:
+			synth_to_add.is_valid()
+			synth_to_add.save()
+			return Response(synth_to_add.data, status=status.HTTP_201_CREATED)
+		except Exception as e:
+			print("Error")
+			return Response(e.__dict__ if e.__dict__ else str(e), status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+```
+
+###### `synth/models.py`
+
+I initially did not consider`JSONField` but found that it was easy to add to the model and proved effective in dealing with the effects field which by default is an empty list of dictionaries. This helped with coding the frontend, meaning that I could choose the effects during the frontend build process without having to update the models every time I wanted to add a different effect.
+
+``` Python
+class Synth(models.Model):
+	def __str__(self):
+		return f'{self.name}'
+	
+	name = models.CharField(max_length=80)
+	a_d_s_r = ArrayField(models.IntegerField())
+	waveform = models.CharField(max_length=20)
+	effects = ArrayField(
+		models.JSONField(default=dict),
+		blank=True,
+		null=True
+	)
+	
+	freqs = ArrayField(models.IntegerField())
+	
+	owner = models.ForeignKey(
+	'jwt_auth.User',
+	related_name="synth",
+	on_delete=models.CASCADE
+	)
+```
+
+
+Django as a framework felt structured and efficient to use and enabled me to complete the models with relative ease.
+
+#### Frontend (Day 3-9)
 
 Using the Tone.js library, I was able to able to build a basic synth using JavaScript classes in the following structure:
 
@@ -174,15 +271,8 @@ function handleMouseOff() {
 }
 ```
 
-After testing I had to add `onMouseLeave` to `handleMouseOff` because a bug occurred where if you press and held a note and then left the grid area, then the note would play continuously.
-
-%% #### Mapping Frequencies to the Grid
-
-.... %%
-
-#### Warp Calculation
-
-  
+After building and testing I had to add `onMouseLeave` to `handleMouseOff` because a bug occurred where if you press and held a note and then left the grid area, then the note would play continuously.
+##### Warp Calculation
 
 ``` JavaScript
 
@@ -232,59 +322,7 @@ With 5 divisions:
 * Lowest: $110$
 * Highest: $8086.92$
 
-You can check for yourself by adjusting the 'warp' down to 5 and playing notes above $1000$ Hz on [the Synth](https://synth-sounds.netlify.app/synth).
-
-### Linear or Logarithmic?
-
-  
-
-#### Linear Tests
-
-  
-
-For brevity, the code for some of these tests have been added to the [Appendix](#testing-with-linear-divisions).
-
-#### Calculating the Equal Temperament
-
-  
-
-For 12-Tone:
-
-  
-
-This is done inside of the above function by dividing the octave into 12 parts, all of which are equal, with a ratio equal to the 12th root of 2:
-
-  
-
-$\sqrt[12]{2}​$ ≈ 1.05946
-
-To calculate the 12-Tone, I did it as follows:
-
-  
-
-$2^{1/12}$ ≈ 1.05946
-
-  
-
-This can be changed dynamically through use of the function:
-
-  
-
-``` JavaScript
-
-function calculateEqualTemperament() {
-
-temperament = (2 ** (1/equalTemperament));
-
-}
-
-calculateEqualTemperament()
-
-```
-
-  
-  
-  
+You can check for yourself by adjusting the 'warp' down to 5 and playing notes above $1000$ Hz on [the Synth](https://synth-sounds.netlify.app/synth). The higher up that the notes get, the more harsh and unpleasant they sound.
 
 ## Accreditations
 
@@ -295,9 +333,7 @@ The placeholder text on the home page, underneath the volume warning, comes from
 ### Wins
 ##### Warp
 
-==I was most happy with the 'Warp' feature, that I mostly built on my phone's 'Notes' app while on a bus. I managed to work out the ==
-
-
+I was most happy with the 'Warp' feature. I researched the logarithmic formula and then coded this on my phone's 'Notes' app while on a bus, so I was surprised that I managed to get it working when I transferred it to my IDE.
 ### Bugs
 
 Warp under 5: Perhaps a better way to do this would have been to add logic that prevents the `for` loop from pushing numbers in that are above a certain frequency and still allow users to choose divisions of less than 5.
