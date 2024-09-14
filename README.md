@@ -379,10 +379,10 @@ On mobile devices the onTouchEnd
 
 ### Key Learnings
 
-My main takeaway from this project is that working with an unfamiliar library and reading  
+My main takeaway from this project is that it can be time-consuming to work with an unfamiliar library. Reading the documentation and performing tests with Tone.js took time. It is a great tool that makes web audio manipulation much easier but I found that due to the lack of resources (when compared to other libraries that I'm more familiar with) it was a longer process than it would have been if I'd chosen a more standard project.
 
-Tone.js -- an unfamiliar library
-Experience with React, props, hooks
+I enjoyed working more with React. Learning more about React hooks and new ways to dynamically change content. One small discovery was the use of `useEffect` to manipulate the `document.title`, to change the titlebar text.
+
 ### Improvements
 
 ##### Refactoring
