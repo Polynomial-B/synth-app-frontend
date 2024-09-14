@@ -379,9 +379,13 @@ On mobile devices the onTouchEnd
 
 ### Key Learnings
 
-My main takeaway from this project is that it can be time-consuming to work with an unfamiliar library. Reading the documentation and performing tests with Tone.js took time. It is a great tool that makes web audio manipulation much easier but I found that due to the lack of resources (when compared to other libraries that I'm more familiar with) it was a longer process than it would have been if I'd chosen a more standard project.
+This project helped me gain a better understanding of the Django REST Framework as it was my first time using it to create the backend to a project. Although I initially found it quite restrictive, I learned to appreciate the speed and efficiency at which you can create a backend with built-in authentication (e.g. using `IsAuthenticatedOrReadOnly`) and data validation (e.g. through use of the Serialisers).
 
-I enjoyed working more with React. Learning more about React hooks and new ways to dynamically change content. One small discovery was the use of `useEffect` to manipulate the `document.title`, to change the titlebar text.
+
+Another learning point from this project is that it can be time-consuming to work with unfamiliar libraries. Reading the Tone.js documentation and performing tests took time. It is a great tool that makes web audio manipulation much easier but I found that, due to the learning curve and lack of online resources, it was a longer process than it would have been if I'd chosen a more standard project.
+
+
+I enjoyed building  with React, learning more about React hooks and new ways to dynamically change content. One small discovery was the use of `useEffect` to manipulate the `document.title`, to change the titlebar text.
 
 ### Improvements
 
