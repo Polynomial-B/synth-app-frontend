@@ -65,7 +65,7 @@ function Collection() {
 													{collection.name}
 												</div>
 												<img
-													src="./src/assets/images/html-icon.png"
+													src="https://wallpapers.com/images/hd/purple-aesthetic-keyboard-cat-yws9dijlf2gl62r5.jpg"
 													alt={collection.name}
 												/>
 											</div>
