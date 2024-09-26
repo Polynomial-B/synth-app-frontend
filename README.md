@@ -11,35 +11,35 @@
 - The app has at least one data entity in addition to the User model. At least one entity must have a relationship with the User model.
 - The app has full CRUD functionality.
 - The app is deployed online so that the rest of the world can use it.
-### Project Members:
+### Project Members
 
 * Matt Lamb
 
-### Timeframe:
+### Timeframe
 
 * 9 Days
 
-#### Goal:
+### Goal
 
 Create a full-stack CRUD React application with Django and PostgreSQL, using Django’s built-in session-based authentication. The app will have one data entity in addition to the User model and contain a one-to-many or many-to-many relationship with the User model.
 
-# SynthSounds
+## SynthSounds
 
   
 SynthSounds is an experimental synthesiser that allows micro-tuning [(click to navigate to 'Warp' section for further explanation)](#Warp).
 
 ### Concept
 
-For my final project I wanted to try something that wasn't just a CRUD app. I thought about how I could incorporate my musical interest into this and came up with two ideas, eventually settling on a grid-based synthesiser.
+For my final project I wanted to try something that could incorporate my musical interests.
 
-I wanted SynthSounds to be a customisable music synthesiser that abstracted away musical notations to allow experimentation based on the sounds rather than their placement in keys and scales. So instead of having the more familiar black and white piano notes, everything is expressed in a grid with numbers (the musical frequencies in Hertz). The lower the number, the lower the pitch.
+I wanted SynthSounds to be a customisable music synthesiser that abstracted away musical notation to allow experimentation based on the sounds rather than their placement in keys and scales. So instead of having the more familiar black and white piano notes, everything is expressed in a grid with numbers (the musical frequencies in Hertz). The lower the number, the lower the pitch.
 
-### Deployed version:
+### Deployed version
 
   
-
-[Synth-Sounds homepage](https://synth-sounds.netlify.app/)
 [Quick play (no login required)](https://synth-sounds.netlify.app/synth)
+[Synth-Sounds homepage](https://synth-sounds.netlify.app/)
+
   
 ## Technologies and Dependencies
 
@@ -51,7 +51,6 @@ I wanted SynthSounds to be a customisable music synthesiser that abstracted away
 - HTML
 - CSS
 - Axios
-- React-dom
 - React-router-dom
 - React-toastify
 - Bulma
@@ -62,10 +61,21 @@ I wanted SynthSounds to be a customisable music synthesiser that abstracted away
 - PostgreSQL
 - Django
 - Psycopg2
-- Djangorestframework
+- Django REST Framework
 - PyJWT
-- Django-cors-headers
-- Django-on-heroku
+- CORS
+
+#### Development Tools
+
+- VS Code
+- Postman
+- Git
+- Github
+- Chrome DevTools
+- Heroku (deployment)
+- Netlify (deployment)
+- Trello (planning)
+- Excalidraw (wireframing)
 
 ## Planning & Build
 
@@ -165,20 +175,6 @@ Division amount: 18.333
 To calculate the divisions of the standard western scale, I used the ratio equal to the 12th root of 2:
 
 $\sqrt[12]{2}​$ ≈ 1.05946
-
-In the frontend, I did it as follows:
-
-$2^{1/12}$ ≈ 1.05946
-
-This can be changed dynamically through use of the function depending on what divisions the user requests:
-
-
-``` JavaScript
-function calculateEqualTemperament() {
-	temperament = (2 ** (1/equalTemperament));
-}
-```
-
 ### Build
 
 To keep track of the build I used [Trello](https://trello.com/b/Z5tLHQq6/synth).
@@ -289,6 +285,27 @@ function handleMouseOff() {
 
 After building and testing, I had to add `onMouseLeave` to `handleMouseOff` because a bug occurred where if you press and held a note and then left the grid area, then the note would play continuously.
 ##### Warp Calculation
+###### Calculating Divisions
+
+To calculate 12 divisions between the notes, I used the following formula:
+
+$\sqrt[12]{2}​$ ≈ 1.05946
+
+or
+
+$2^{1/12}$ ≈ 1.05946
+
+As I wanted this to be changed dynamically, I adapted the formula to be as follows:
+
+
+``` JavaScript
+function calculateEqualTemperament() {
+	temperament = (2 ** (1/equalTemperament));
+}
+```
+
+The variable `equalTemperament` is set by default to $12$ but can be changed by the user.
+###### Creating the Warp Feature
 
 ``` JavaScript
 
@@ -311,7 +328,7 @@ function handleWarp(e) {
 		}
 		calculateEqualTemperament()
 		
-		let newArray = [11000]; // 11000 is our the frequency (A)
+		let newArray = [11000]; // 11000 is the frequency in Hz * 1000
 		
 		for (let i = 0; i < 32; i++) {
 			newArray.push(Math.round(newArray[i] * temperament));
@@ -338,7 +355,7 @@ With 5 divisions:
 * Lowest: $110$
 * Highest: $8086.92$
 
-You can check for yourself by adjusting the 'warp' down to 5 and playing notes above $1000$ Hz on [the Synth](https://synth-sounds.netlify.app/synth). The higher up that the notes get, the more harsh and unpleasant they sound.
+You can check for yourself by adjusting the 'warp' down to 5 and playing notes above $1000$ Hz on [the Synth](https://synth-sounds.netlify.app/synth). The higher up that the notes get, the more harsh they sound.
 
 ## Accreditations
 
@@ -354,36 +371,30 @@ I was most happy with the 'Warp' feature. I researched the logarithmic formula a
 
 Warping under 5 divisions per octave: Perhaps a better way to do this would have been to add logic that prevents the `for` loop from pushing numbers in that are above a certain frequency and still allow users to choose divisions of less than 5.
 
+### Challenges
 
 This project was a challenging endeavour as I built the app using libraries and features that I hadn't used before and, within the timeframe, I was unable to fully test edge cases.
 
-##### Bulma Conflict Issues
-
-Issues with Bulma and the select box, conflicting the z-index of the header. In the end I removed the bulma class `select` and opted to manually style it myself
-
-  
-
 ##### Warp in Collection
 
-Navigating from Collection to a saved synth (Tinker) The Warp useState is set to '12' which doesn't account for if the number of divisions has been changed by the user. If you were to create a Synth that had 5 divisions per octave, you can save it to your collection and it will play correctly, but the divisions amount will say that is it '12' and if you click 'Warp' then it will revert the divisions back to '12'. This would be an easy fix, through updating the useState to the data received from the backend in the useEffect hook. ==This could be done by updating the useEffect state upon...==
+Navigating from Collection to a saved synth (Tinker) causes the Warp useState to revert to '12' which doesn't account for if the number of divisions has been changed by the user. If you were to create a Synth that had 5 divisions per octave, you can save it to your collection and it will play correctly, but the divisions amount will say that is it '12' and if you click 'Warp' then it will revert the divisions back to '12'. This would be an easy fix, through updating the useState to the data received from the backend in the useEffect hook. ==This could be done by updating the useEffect state upon...==
 
-  
+##### Bulma Conflict Issues
 
-onTouchEnd
+Issues with Bulma and the select box, conflicting the z-index of the header. In the end I removed the Bulma class `select` and opted to manually style it myself
 
-On mobile devices the onTouchEnd
-
-  
 
 ## Key Learnings, Improvements & Future Features
 
 ### Key Learnings
-
+##### Django REST Framework
 This project helped me gain a better understanding of the Django REST Framework as it was my first time using it to create the backend to a project. Although I initially found it quite restrictive, I learned to appreciate the speed and efficiency at which you can create a backend with built-in authentication (e.g. using `IsAuthenticatedOrReadOnly`) and data validation (e.g. through use of the Serialisers).
 
+##### Unfamiliar JavaScript Libraries
 
 Another learning point from this project is that it can be time-consuming to work with unfamiliar libraries. Reading the Tone.js documentation and performing tests took time. It is a great tool that makes web audio manipulation much easier but I found that, due to the learning curve and lack of online resources, it was a longer process than it would have been if I'd chosen a more standard project.
 
+##### Different Uses of React Hooks
 
 I enjoyed building  with React, learning more about React hooks and new ways to dynamically change content. One small discovery was the use of `useEffect` to manipulate the `document.title`, to change the titlebar text.
 
@@ -488,7 +499,7 @@ You should be able to turn on/off the effects. Even at the lowest amount, the ch
 
 To allow further experimentation, the user should be able to have a wider range of effects to choose from. For example:
 * Clean delay
-* Bitcrush
+* Bitcrusher
 * Reverb
 
 ##### Division ratio adjustment
@@ -497,4 +508,4 @@ The user should be able to alter the ratio between the notes, i.e. whether they 
 
 ##### Keyboard mapping
 
-To increase desktop user experience, the keys could be mapped to the approximate 26 character keys on a standard keyboard. This could be achieved by utilising a loop and adjusting the logic to generate frequencies within the grid, reducing the range from 32 down to the number of keys on the keyboard.
+To increase desktop user experience, the keys could be mapped to the character keys on a computer keyboard. This could be achieved by utilising a loop and adjusting the logic to generate frequencies within the grid, reducing the range from 32 down to the number of keys on the keyboard.
