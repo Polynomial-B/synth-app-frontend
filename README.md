@@ -19,27 +19,28 @@
 
 * 9 Days
 
-### Goal
+## Goal
 
 Create a full-stack CRUD React application with Django and PostgreSQL, using Django’s built-in session-based authentication. The app will have one data entity in addition to the User model and contain a one-to-many or many-to-many relationship with the User model.
 
 ## SynthSounds
 
-  
 SynthSounds is an experimental synthesiser that allows micro-tuning [(click to navigate to 'Warp' section for further explanation)](#Warp).
 
-### Concept
+## Concept
 
 For my final project I wanted to try something that could incorporate my musical interests.
 
 I wanted SynthSounds to be a customisable music synthesiser that abstracted away musical notation to allow experimentation based on the sounds rather than their placement in keys and scales. So instead of having the more familiar black and white piano notes, everything is expressed in a grid with numbers (the musical frequencies in Hertz). The lower the number, the lower the pitch.
 
-### Deployed version
+## Deployed version
 
-  
-[Quick play (no login required)](https://synth-sounds.netlify.app/synth)
-[Synth-Sounds homepage](https://synth-sounds.netlify.app/)
+- [Quick play (no login required, no CRUD functionality)](https://synth-sounds.netlify.app/synth)
+- [Synth-Sounds (homepage)](https://synth-sounds.netlify.app/)
 
+## Screenshot
+
+![](./src/assets/readme/screenshot.png)
   
 ## Technologies and Dependencies
 
