@@ -2,6 +2,13 @@
 
 # General Assembly Project 4: Synth Sounds
 
+
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![React Router](https://img.shields.io/badge/React_Router-6.24-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![Tone.js](https://img.shields.io/badge/Tone.js-15.0-000000?logo=tone&logoColor=white)](https://tonejs.github.io/)
+[![Axios](https://img.shields.io/badge/Axios-1.7-5A29E4?logo=axios&logoColor=white)](https://axios-http.com/)
+[![React Toastify](https://img.shields.io/badge/React_Toastify-10.0-FFCC00?logo=react&logoColor=black)](https://fkhadra.github.io/react-toastify/)
+
 ## Brief
 
 - The app utilises Django templates for rendering templates to users.
